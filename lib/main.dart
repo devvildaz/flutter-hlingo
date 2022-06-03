@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hlinog/ui/widgets/logo.dart';
+import 'package:hlinog/ui/pages/landingPage.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -10,9 +13,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    const backgroundColor = Color.fromARGB(255, 255, 244, 226);
     return MaterialApp(
       title: 'Flutter Demo',
+      // color: backgroundColor,
       theme: ThemeData(
+        // scaffoldBackgroundColor: backgroundColor,
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
@@ -22,9 +28,16 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        // primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: Container(
+        color: backgroundColor,
+        child: const DefaultTextStyle(
+          style: TextStyle(color: Colors.black, fontFamily: 'Arial', fontSize: 20.0),
+            child: LandingPage(),
+        ),
+
+      ),
     );
   }
 }
