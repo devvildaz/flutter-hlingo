@@ -26,7 +26,9 @@ class LandingPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 150),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/login');
+                  },
                   style: elevatedButtonStyle,
                   child: const Text(signInTxt, style: txtStyle),
                 ),
@@ -34,7 +36,9 @@ class LandingPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 15),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/register');
+                  },
                   style: elevatedButtonStyle,
                   child: const Text(registerTxt, style: txtStyle),
                 ),
