@@ -5,7 +5,7 @@ class LessonIconWidget extends StatelessWidget {
   @override
     Widget build(BuildContext context) {
     return Container(
-      child: ElevatedButton()
+      child: ElevatedButton(onPressed: () {  }, child: null,)
     );
   }
 }
