@@ -32,11 +32,21 @@ class _LoginPage extends State<LoginPage>{
             SizedBox(height: 50,),
             Image.asset('assets/main_logo.png'),
             SizedBox(height: 50,),
-            Text('Correo Electrónico'),
-            TextField(),
+            // Text('Correo Electrónico'),
+            // TextField(),
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: 'Email'
+              ),
+            ),
             SizedBox(height: 50,),
-            Text('Contraseña'),
-            TextField(obscureText: true,),
+            // Text('Contraseña'),
+            // TextField(obscureText: true,),
+            TextFormField(
+              decoration: InputDecoration(
+                  labelText: 'Password'
+              ),
+            ),
             SizedBox(height: 50,),
             OutlinedButton(
                 style: ButtonStyle(
