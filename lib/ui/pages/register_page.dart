@@ -1,4 +1,4 @@
-import 'dart:html';
+
 
 import 'package:flutter/material.dart';
 
@@ -25,33 +25,32 @@ class _RegisterPage extends State<RegisterPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 238, 248, 252),
+      backgroundColor: Colors.grey[100],
       body: Container(
         margin: EdgeInsets.only(left: 100,right: 100),
-        alignment: Alignment.center,
         child: Column(
           children: <Widget>[
             SizedBox(height: 25,),
             Image.asset('assets/main_logo.png'),
             SizedBox(height: 50,),
-            Text('Nombres'),
+            Text('Nombres',textAlign: TextAlign.left,),
             TextField(),
             SizedBox(height: 50,),
-            Text('Apellidos'),
+            Text('Apellidos',textAlign: TextAlign.left,),
             TextField(),
             SizedBox(height: 50,),
-            Text('Correo Electrónico'),
+            Text('Correo Electrónico',textAlign: TextAlign.left,),
             TextField(),
             SizedBox(height: 50,),
-            Text('Contraseña'),
+            Text('Contraseña',textAlign: TextAlign.left,),
             TextField(obscureText: true,),
             SizedBox(height: 50,),
             OutlinedButton(
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 33, 52, 118)),
+                  backgroundColor: MaterialStateProperty.all(Colors.indigo[600]),
+                  foregroundColor: MaterialStateProperty.all<Color>(Color(0xffffffff),),
                   minimumSize: MaterialStateProperty.all<Size>(Size(250, 45)),
-                  textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(
-                      color:Colors.white,
+                  textStyle: MaterialStateProperty.all(TextStyle(
                       fontFamily: 'Arial')),
                 ),
                 onPressed: (){},

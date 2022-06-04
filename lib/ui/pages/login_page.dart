@@ -1,4 +1,3 @@
-import 'dart:html';
 
 import 'package:flutter/material.dart';
 
@@ -25,7 +24,7 @@ class _LoginPage extends State<LoginPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 238, 248, 252),
+      backgroundColor: Colors.grey[100],
       body: Container(
         margin: EdgeInsets.only(left: 100,right: 100),
         alignment: Alignment.center,
@@ -42,8 +41,8 @@ class _LoginPage extends State<LoginPage>{
             SizedBox(height: 50,),
             OutlinedButton(
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 33, 52, 118)),
-                  minimumSize: MaterialStateProperty.all<Size>(Size(250, 45)),
+                  backgroundColor: MaterialStateProperty.all(Colors.indigo[600]),
+                  foregroundColor: MaterialStateProperty.all<Color>(Color(0xffffffff),),
                   textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(
                       color:Colors.black,
                       fontFamily: 'Arial')),
