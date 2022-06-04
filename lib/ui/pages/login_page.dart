@@ -62,9 +62,10 @@ class _LoginPage extends State<LoginPage>{
                   ),
                   onPressed: (){
                     if(_formKey.currentState!.validate()) {
-                      Scaffold.of(context).showSnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content:Text("Accesando al Sistema"))
                       );
+                      Navigator.pushNamed(context, "/home");
                     }
                   },
                   child: Text('Iniciar Sesión')),
