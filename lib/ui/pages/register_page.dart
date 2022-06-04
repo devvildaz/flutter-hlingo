@@ -1,17 +1,5 @@
 import 'package:flutter/material.dart';
 
-class Register extends StatelessWidget{
-  const Register({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Register',
-      home: const RegisterPage(),
-    );
-  }
-}
-
 class RegisterPage extends StatefulWidget{
   const RegisterPage({Key? key}) : super(key: key);
 
