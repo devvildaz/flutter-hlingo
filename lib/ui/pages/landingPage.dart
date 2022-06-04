@@ -8,9 +8,10 @@ class LandingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     const signInTxt = 'Iniciar sesión';
     const registerTxt = 'Registrarse';
-    const txtStyle = TextStyle(fontSize: 20.0, color: Colors.black, fontFamily: 'Arial');
+    const txtStyle = TextStyle(fontSize: 20.0, color: Colors.white, fontFamily: 'Arial');
     final ButtonStyle elevatedButtonStyle = ElevatedButton.styleFrom(
-        primary: const Color.fromARGB(255, 255, 216, 157),
+        // primary: const Color.fromARGB(255, 255, 216, 157),
+        primary: Colors.indigo[600],
         minimumSize: const Size(250, 45),
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         shape: const RoundedRectangleBorder(

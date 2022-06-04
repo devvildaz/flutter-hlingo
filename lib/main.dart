@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    const backgroundColor = Color.fromARGB(255, 255, 244, 226);
+    var backgroundColor = Colors.white;
     return MaterialApp(
       title: 'Flutter Demo',
       // color: backgroundColor,
