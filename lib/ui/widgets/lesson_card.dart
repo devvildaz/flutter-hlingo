@@ -8,8 +8,8 @@ class LessonCard extends StatelessWidget {
     return Card(
       elevation: 0,
       child: InkWell(
-          splashColor: Colors.amber[100],
-          highlightColor: Colors.amber.withAlpha(50),
+          splashColor: Colors.indigo[100],
+          highlightColor: Colors.indigo.withAlpha(50),
           onTap: () {
             debugPrint('Card tapped.');
           },

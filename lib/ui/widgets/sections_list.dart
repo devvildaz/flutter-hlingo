@@ -54,7 +54,7 @@ class _SectionsListState extends State<SectionsList> {
       children: _data.map<ExpansionPanel>((Item item) {
         return ExpansionPanel(
           canTapOnHeader: true,
-          backgroundColor: Colors.amber[50],
+          backgroundColor: Colors.grey[100],
           headerBuilder: (BuildContext context, bool isExpanded) {
             return Container(
               alignment: Alignment.centerLeft,
