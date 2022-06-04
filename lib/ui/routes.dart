@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hlinog/ui/pages/home_page.dart';
 import 'package:hlinog/ui/pages/landing_page.dart';
+import 'package:hlinog/ui/pages/lesson_screen.dart';
 import 'package:hlinog/ui/pages/login_page.dart';
 import 'package:hlinog/ui/pages/register_page.dart';
 import 'package:hlinog/ui/pages/search_page.dart';
@@ -36,5 +37,6 @@ Map<String, WidgetBuilder> getRoutes() {
     '/search': (context) => const SearchPage(),
     '/login':(context)=> const Login(),
     '/register':(context)=>const Register(),
+    '/lesson':(context)=>const LessonScreen(),
   };
 }
