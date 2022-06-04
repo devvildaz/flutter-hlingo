@@ -12,7 +12,7 @@ import 'package:hlinog/ui/pages/search_page.dart';
 
 Map<String, WidgetBuilder> getRoutes() {
   return <String, WidgetBuilder>{
-   /* '/': (context) => Scaffold(
+    /* '/': (context) => Scaffold(
           appBar: AppBar(
             title: const Text('Landing'),
           ),
@@ -23,7 +23,7 @@ Map<String, WidgetBuilder> getRoutes() {
             },
           ),
         ),*/
-    '/':(context)=>const LandingPage(),
+    '/': (context) => const LandingPage(),
     '/home': (context) => const HomePage(),
     '/profile': (context) => Scaffold(
           appBar: AppBar(
@@ -36,11 +36,11 @@ Map<String, WidgetBuilder> getRoutes() {
             },
           ),
         ),
-    '/search': (context) => const SearchPage(),
-    '/login':(context)=>  LoginPage(),
-    '/register':(context)=>  RegisterPage(),
-    '/lesson':(context)=>const LessonScreen(),
-    '/profile':(context)=>const ProfilePage(),
-    '/profile/edit':(context)=>const ProfilePageEdit(),
+    '/search': (context) => SearchPage(),
+    '/login': (context) => LoginPage(),
+    '/register': (context) => RegisterPage(),
+    '/lesson': (context) => const LessonScreen(),
+    '/profile': (context) => const ProfilePage(),
+    '/profile/edit': (context) => const ProfilePageEdit(),
   };
 }
