@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hlinog/ui/pages/home_page.dart';
+import 'package:hlinog/ui/pages/search_page.dart';
 
 // Aquí ponen sus rutas o reemplazan los placeholders q puse
 
@@ -28,5 +29,6 @@ Map<String, WidgetBuilder> getRoutes() {
             },
           ),
         ),
+    '/search': (context) => const SearchPage()
   };
 }
