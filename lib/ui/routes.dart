@@ -6,7 +6,7 @@ import 'package:hlinog/ui/pages/search_page.dart';
 
 Map<String, WidgetBuilder> getRoutes() {
   return <String, WidgetBuilder>{
-    '/': (context) => Scaffold(
+    /* '/': (context) => Scaffold(
           appBar: AppBar(
             title: const Text('Landing'),
           ),
@@ -16,7 +16,8 @@ Map<String, WidgetBuilder> getRoutes() {
               Navigator.pushNamed(context, '/home');
             },
           ),
-        ),
+        ),*/
+
     '/home': (context) => const HomePage(),
     '/profile': (context) => Scaffold(
           appBar: AppBar(
@@ -29,6 +30,6 @@ Map<String, WidgetBuilder> getRoutes() {
             },
           ),
         ),
-    '/search': (context) => const SearchPage()
+    '/search': (context) => SearchPage(),
   };
 }

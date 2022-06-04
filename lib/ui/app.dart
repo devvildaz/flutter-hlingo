@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'HoloLingo',
-        initialRoute: '/',
+        initialRoute: '/search',
         routes: getRoutes());
   }
 }
