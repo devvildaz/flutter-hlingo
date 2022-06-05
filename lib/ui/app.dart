@@ -9,7 +9,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'HoloLingo',
-        initialRoute: '/',
+        theme: ThemeData(backgroundColor: const Color(0xFFFFFFFF)),
+        initialRoute: '/lesson',
         routes: getRoutes());
   }
 }

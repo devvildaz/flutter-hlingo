@@ -1,4 +1,7 @@
+import 'package:camera/camera.dart';
 import "package:flutter/material.dart";
+import 'package:hlinog/ui/pages/camera_screen.dart';
+import 'package:image_picker/image_picker.dart';
 import "../widgets/lesson_icon.dart";
 
 class LessonScreen extends StatefulWidget {
@@ -15,7 +18,7 @@ final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
 );
 
 class _LessonScreenState extends State<LessonScreen> {
-  
+
   @override
   Widget build(BuildContext context) {
       
@@ -23,11 +26,11 @@ class _LessonScreenState extends State<LessonScreen> {
 
     return Container(
       margin: EdgeInsets.only(top: height),
-      padding: EdgeInsets.only(top: 100), 
+      padding: const EdgeInsets.only(top: 100),
       color: Colors.white,
       child: Column(
         children: [
-          LessonIconWidget(),
+          const LessonIconWidget(),
           Expanded(
             child: SizedBox(
               child: GridView.count(
@@ -37,8 +40,15 @@ class _LessonScreenState extends State<LessonScreen> {
                 childAspectRatio: 9.33 ,
                 mainAxisSpacing: 10,
                 children: [
-                  ElevatedButton(onPressed: null, child: const Text('<text plain>')),
-                  ElevatedButton(onPressed: null, child: const Text('<text plain>'))
+                  ElevatedButton(onPressed: () async {
+                    await availableCameras().then((value) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => CameraScreen(cameras: value))
+                      );
+                    });
+                  }, child: const Text('Practicar')),
+                  ElevatedButton(onPressed: null, child: const Text('Ver video de practica'))
                 ]          
               ),
             ),
@@ -48,5 +58,4 @@ class _LessonScreenState extends State<LessonScreen> {
     );
   }
 }
-
 
