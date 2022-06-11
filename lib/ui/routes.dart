@@ -25,7 +25,7 @@ Map<String, WidgetBuilder> getRoutes() {
         ),*/
     '/': (context) => const LandingPage(),
     '/home': (context) => const HomePage(),
-    '/profile': (context) => Scaffold(
+    /*'/profile': (context) => Scaffold(
           appBar: AppBar(
             title: const Text('Profile'),
           ),
@@ -35,10 +35,10 @@ Map<String, WidgetBuilder> getRoutes() {
               Navigator.pushNamed(context, '/home');
             },
           ),
-        ),
+        ),*/
     '/search': (context) => SearchPage(),
     '/login': (context) => LoginPage(),
-    '/register': (context) => RegisterPage(),
+    '/register': (context) => const RegisterPage(),
     '/lesson': (context) => const LessonScreen(),
     '/profile': (context) => const ProfilePage(),
     '/profile/edit': (context) => const ProfilePageEdit(),

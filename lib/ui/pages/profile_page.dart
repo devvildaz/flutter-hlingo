@@ -119,7 +119,7 @@ class ProfilePage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () => Navigator.pushNamed(context, "/profile/edit"),
           backgroundColor: Color(0xff3949ab),
           child: Icon(Icons.border_color, color: Colors.white)
       ),
