@@ -17,30 +17,36 @@ class LandingPage extends StatelessWidget {
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(3.0)),
         ));
-    return Center(
-        child: Container(
-          padding: const EdgeInsets.only(top: 250.0),
-          child: Column(
-            children: [
-              const Logo(),
-              Padding(
-                padding: const EdgeInsets.only(top: 150),
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: elevatedButtonStyle,
-                  child: const Text(signInTxt, style: txtStyle),
+    return Scaffold(
+      body:  Center(
+          child: Container(
+            padding: const EdgeInsets.only(top: 250.0),
+            child: Column(
+              children: [
+                const Logo(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 150),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
+                    style: elevatedButtonStyle,
+                    child: const Text(signInTxt, style: txtStyle),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 15),
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: elevatedButtonStyle,
-                  child: const Text(registerTxt, style: txtStyle),
-                ),
-              )
-            ],
-          ),
-        ));
+                Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/register');
+                    },
+                    style: elevatedButtonStyle,
+                    child: const Text(registerTxt, style: txtStyle),
+                  ),
+                )
+              ],
+            ),
+          )),
+    );
   }
 }
