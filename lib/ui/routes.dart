@@ -41,6 +41,6 @@ Map<String, WidgetBuilder> getRoutes() {
     '/register': (context) => const RegisterPage(),
     '/lesson': (context) => const LessonScreen(),
     '/profile': (context) => const ProfilePage(),
-    '/profile/edit': (context) => const ProfilePageEdit(),
+    '/profile/edit': (context) => ProfilePageEdit(),
   };
 }

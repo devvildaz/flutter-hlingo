@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:hlinog/ui/widgets/appbar.dart';
 
 class ProfilePageEdit extends StatefulWidget {
-  const ProfilePageEdit({Key? key}) : super(key: key);
+  //const ProfilePageEdit({Key? key}) : super(key: key);
 
   @override
   State<ProfilePageEdit> createState() => _ProfilePageEditState();
 }
 
 class _ProfilePageEditState extends State<ProfilePageEdit> {
-  final _formKey = GlobalKey<FormState>();
   static final RegExp _letraRegExp = RegExp(r'^[a-zA-Z0-9_\-=@,\.;]+$');
   static final RegExp _emailRegExp = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9\-\_]+(\.[a-zA-Z]+)*$");
+  final _formKey = GlobalKey<FormState>();
 
   bool _esLetra(String str) {
     return _letraRegExp.hasMatch(str);
@@ -42,7 +42,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
               ],
             ),
             Row(
-              children: [
+              children: const [
                 Expanded(
                     child: Text(
                   'Miguel Rodriguez',
@@ -52,7 +52,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
               ],
             ),
             Row(
-              children: [
+              children: const [
                 Expanded(
                     child: Text(
                   'miguel.rodriguez@altocorreo.com',
@@ -61,11 +61,11 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                 )),
               ],
             ),
-            SizedBox(height: 55),
+            const SizedBox(height: 55),
             Row(
-              children: [
+              children: const [
                 SizedBox(width: 20),
-                Container(
+                SizedBox(
                     width: 350,
                     height: 20,
                     child: Text(
@@ -80,7 +80,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
             ),
             Row(
               children: [
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Container(
                     width: 350,
                     height: 40,
@@ -105,13 +105,13 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                     )),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
             Row(
-              children: [
+              children: const [
                 SizedBox(width: 20),
-                Container(
+                SizedBox(
                     width: 350,
                     height: 20,
                     child: Text(
@@ -125,13 +125,13 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
             ),
             Row(
               children: [
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Container(
                     width: 350,
                     height: 40,
                     alignment: Alignment.center,
                     child: TextFormField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.only(
                           left: 10,
@@ -146,17 +146,17 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                         }
                       },
                       textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 15, color: Colors.black),
+                      style: const TextStyle(fontSize: 15, color: Colors.black),
                     )),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
             Row(
-              children: [
+              children: const [
                 SizedBox(width: 20),
-                Container(
+                SizedBox(
                     width: 350,
                     height: 20,
                     child: Text(
@@ -170,13 +170,13 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
             ),
             Row(
               children: [
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Container(
                     width: 350,
                     height: 40,
                     alignment: Alignment.center,
                     child: TextFormField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.only(
                           left: 10,
@@ -195,7 +195,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                     )),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 110,
             ),
             Row(
@@ -208,16 +208,16 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                     child: ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                                 content: Text("Guardando cambios ...")));
                           }
                         },
-                        child: (Text(
+                        child: (const Text(
                           "Actualizar Datos",
                           style: TextStyle(fontSize: 20),
                         )),
                         style: ElevatedButton.styleFrom(
-                          primary: Color(0xff3949ab),
+                          primary: const Color(0xff3949ab),
                         )))
               ],
             )
@@ -232,13 +232,13 @@ class OpenPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     var paint1 = Paint()
-      ..color = Color(0xffededed)
+      ..color = const Color(0xffededed)
       ..style = PaintingStyle.fill;
     var paint2 = Paint()
-      ..color = Color(0xff1a237e)
+      ..color = const Color(0xff1a237e)
       ..style = PaintingStyle.fill;
-    canvas.drawRect(Offset(20, 0) & Size(350, 20), paint1);
-    canvas.drawRect(Offset(20, 0) & Size(220, 20), paint2);
+    canvas.drawRect(const Offset(20, 0) & const Size(350, 20), paint1);
+    canvas.drawRect(const Offset(20, 0) & const Size(220, 20), paint2);
   }
 
   @override
