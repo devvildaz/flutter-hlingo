@@ -20,7 +20,7 @@ class _LoginPage extends State<LoginPage>{
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: Container(
-        margin: const EdgeInsets.only(left: 100,right: 100),
+        padding: const EdgeInsets.only(left: 24,right: 24),
         alignment: Alignment.center,
         child: Form(
           key: _formKey,
@@ -39,7 +39,6 @@ class _LoginPage extends State<LoginPage>{
                   }
                 },
               ),
-              const SizedBox(height: 50,),
               TextFormField(
                 obscureText: true,
                 decoration: const InputDecoration(

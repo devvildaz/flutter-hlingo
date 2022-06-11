@@ -18,14 +18,13 @@ class _RegisterPage extends State<RegisterPage>{
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: Container(
-        margin: EdgeInsets.only(left: 100,right: 100),
+        padding: EdgeInsets.only(left: 24,right: 24),
         child: Form(
           key: _formKey,
           child:Column(
           children: <Widget>[
             SizedBox(height: 25,),
-            Image.asset('assets/main_logo.png'),
-            SizedBox(height: 50,),
+            Image.asset("assets/main_logo.png"),
             TextFormField(
               decoration: const InputDecoration(
                   labelText: 'Nombres'
@@ -35,7 +34,6 @@ class _RegisterPage extends State<RegisterPage>{
                   return 'Ingrese sus Nombres';
                 }
               },),
-            SizedBox(height: 50,),
             TextFormField(
               decoration: const InputDecoration(
                   labelText: 'Apellidos'
@@ -45,7 +43,6 @@ class _RegisterPage extends State<RegisterPage>{
                   return 'Ingrese sus Apellidos';
                 }
               },),
-            SizedBox(height: 50,),
             TextFormField(
               decoration: const InputDecoration(
                   labelText: 'Correo Electrónico'
@@ -55,7 +52,6 @@ class _RegisterPage extends State<RegisterPage>{
                   return 'Ingrese un correo electrónico válido';
                 }
               },),
-            SizedBox(height: 50,),
             TextFormField(
               decoration: const InputDecoration(
                   labelText: 'Contraseña'
@@ -85,8 +81,6 @@ class _RegisterPage extends State<RegisterPage>{
                 child: Text('Registrarse')),
           ],
         ), )
-
-
       ),
 
     );
