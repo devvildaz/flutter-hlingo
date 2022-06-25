@@ -12,7 +12,6 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   String _searchTerm = '';
   String? _error;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
