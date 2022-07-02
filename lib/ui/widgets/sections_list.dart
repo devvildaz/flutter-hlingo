@@ -1,30 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hlinog/models/lesson.dart';
 import 'package:hlinog/providers/lessons_provider.dart';
 import 'package:hlinog/ui/widgets/lesson_card.dart';
 
-class Item {
-  Item({
+class Category {
+  Category({
+    required this.name,
     required this.expandedValue,
-    required this.headerValue,
     this.isExpanded = false,
   });
 
-  Widget expandedValue;
-  String headerValue;
+  String name;
+  List<Widget> expandedValue;
   bool isExpanded;
-}
-
-List<Item> generateItems(int numberOfItems) {
-  return List<Item>.generate(numberOfItems, (int index) {
-    return Item(
-      headerValue: 'Sección ${index + 1}',
-      expandedValue: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: const [LessonCard(), LessonCard(), LessonCard()],
-      ),
-    );
-  });
 }
 
 class SectionsList extends StatefulWidget {
@@ -35,14 +25,12 @@ class SectionsList extends StatefulWidget {
 }
 
 class _SectionsListState extends State<SectionsList> {
-  late Future<List<Lesson>> lessons;
-  final List<Item> _data = generateItems(15);
   final lessonsProvider = LessonsProvider();
+  late List<Category> sections;
 
   @override
   void initState() {
     super.initState();
-    lessons = lessonsProvider.getLessons();
   }
 
   @override
@@ -53,36 +41,94 @@ class _SectionsListState extends State<SectionsList> {
   }
 
   Widget _buildPanel() {
-    return ExpansionPanelList(
-      expandedHeaderPadding: const EdgeInsets.symmetric(vertical: 8),
-      elevation: 0,
-      expansionCallback: (int index, bool isExpanded) {
-        setState(() {
-          _data[index].isExpanded = !isExpanded;
-        });
-      },
-      children: _data.map<ExpansionPanel>((Item item) {
-        return ExpansionPanel(
-          canTapOnHeader: true,
-          backgroundColor: Colors.grey[100],
-          headerBuilder: (BuildContext context, bool isExpanded) {
-            return Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Text(
-                item.headerValue,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
+    return FutureBuilder<List<Lesson>>(
+      future: lessonsProvider.getLessons(),
+      builder: (BuildContext context, AsyncSnapshot<List<Lesson>> snapshot) {
+        if (snapshot.hasData) {
+          List<Lesson> lessons = snapshot.data!;
+
+          final categories =
+              lessons.map((lesson) => lesson.categoryName).toSet().toList();
+
+          //group lessons by category in a list of Category objects
+          sections = categories.map((category) {
+            final lessons_in_category = lessons
+                .where((lesson) => lesson.categoryName == category)
+                .toList();
+            return Category(
+              name: category,
+              expandedValue: lessons_in_category.map((lesson) {
+                return LessonCard(
+                  title: lesson.title,
+                );
+              }).toList(),
             );
-          },
-          body: Container(
-              child: item.expandedValue,
-              color: Colors.white,
-              alignment: Alignment.center),
-          isExpanded: item.isExpanded,
-        );
-      }).toList(),
+          }).toList();
+
+          return ExpansionPanelList(
+            expandedHeaderPadding: const EdgeInsets.symmetric(vertical: 8),
+            elevation: 0,
+            expansionCallback: (int index, bool isExpanded) {
+              setState(() {
+                sections[index].isExpanded = !isExpanded;
+              });
+            },
+            children: sections.map((section) {
+              return ExpansionPanel(
+                  canTapOnHeader: true,
+                  backgroundColor: Colors.grey[100],
+                  headerBuilder: (BuildContext context, bool isExpanded) {
+                    return Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Text(
+                        section.name,
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    );
+                  },
+                  body: Text("a"),
+                  isExpanded: section.isExpanded);
+            }).toList(),
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
+
+    // return ExpansionPanelList(
+    //   expandedHeaderPadding: const EdgeInsets.symmetric(vertical: 8),
+    //   elevation: 0,
+    //   expansionCallback: (int index, bool isExpanded) {
+    //     setState(() {
+    //       _data[index].isExpanded = !isExpanded;
+    //     });
+    //   },
+    //   children: _data.map<ExpansionPanel>((Item item) {
+    //     return ExpansionPanel(
+    //       canTapOnHeader: true,
+    //       backgroundColor: Colors.grey[100],
+    //       headerBuilder: (BuildContext context, bool isExpanded) {
+    //         return Container(
+    //           alignment: Alignment.centerLeft,
+    //           padding: const EdgeInsets.symmetric(horizontal: 12),
+    //           child: Text(
+    //             item.lesson.title,
+    //             style:
+    //                 const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    //           ),
+    //         );
+    //       },
+    //       body: Container(
+    //           child: item.expandedValue,
+    //           color: Colors.white,
+    //           alignment: Alignment.center),
+    //       isExpanded: item.isExpanded,
+    //     );
+    //   }).toList(),
+    // );
   }
 }

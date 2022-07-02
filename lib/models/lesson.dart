@@ -31,7 +31,7 @@ class Lesson {
         description: json["description"],
         exampleVideo: json["example_video"],
         categoryName: json["category_name"],
-        dateCreated: DateCreated.fromJson(json["dateCreated"]),
+        dateCreated: DateCreated.fromJson(json["date_created"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -40,16 +40,16 @@ class Lesson {
         "description": description,
         "example_video": exampleVideo,
         "category_name": categoryName,
-        "dateCreated": dateCreated?.toJson(),
+        "date_created": dateCreated?.toJson(),
       };
 }
 
 class DateCreated {
   DateCreated({
-    this.date,
+    required this.date,
   });
 
-  int? date;
+  int date;
 
   factory DateCreated.fromJson(Map<String, dynamic> json) => DateCreated(
         date: json["\u0024date"],
