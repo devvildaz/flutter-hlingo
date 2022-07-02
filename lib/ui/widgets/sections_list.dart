@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hlinog/models/lesson.dart';
+import 'package:hlinog/providers/lessons_provider.dart';
 import 'package:hlinog/ui/widgets/lesson_card.dart';
 
 class Item {
@@ -33,7 +35,15 @@ class SectionsList extends StatefulWidget {
 }
 
 class _SectionsListState extends State<SectionsList> {
+  late Future<List<Lesson>> lessons;
   final List<Item> _data = generateItems(15);
+  final lessonsProvider = LessonsProvider();
+
+  @override
+  void initState() {
+    super.initState();
+    lessons = lessonsProvider.getLessons();
+  }
 
   @override
   Widget build(BuildContext context) {
