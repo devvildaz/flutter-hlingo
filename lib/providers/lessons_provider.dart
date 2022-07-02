@@ -8,7 +8,10 @@ class LessonsProvider {
   Future<List<Lesson>> getLessons() async {
     final res = await http.get(Uri.parse('$baseUrl/lessons'));
     if (res.statusCode == 200) {
-      return json.decode(res.body);
+      return json
+          .decode(res.body)
+          .map<Lesson>((json) => Lesson.fromJson(json))
+          .toList();
     } else {
       throw Exception('Error getting lessons');
     }
