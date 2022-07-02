@@ -11,8 +11,8 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPage extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
-  User user=User(email: "", password: "");
-  final AuthProvider authProvider=AuthProvider();
+  User user = User(email: "", password: "");
+  final AuthProvider authProvider = AuthProvider();
   static final RegExp _emailRegExp = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9\-\_]+(\.[a-zA-Z]+)*$");
   bool _isEmail(String email) {
@@ -35,12 +35,13 @@ class _RegisterPage extends State<RegisterPage> {
                   ),
                   Image.asset("assets/main_logo.png"),
                   TextFormField(
-                    onChanged: (value){
-                      setState((){
-                        user.name=value;
+                    onChanged: (value) {
+                      setState(() {
+                        user.name = value;
                       });
                     },
-                    decoration: const InputDecoration(labelText: 'Nombre Completo'),
+                    decoration:
+                        const InputDecoration(labelText: 'Nombre Completo'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Ingrese sus Nombres';
@@ -48,11 +49,10 @@ class _RegisterPage extends State<RegisterPage> {
                     },
                   ),
                   TextFormField(
-                    onChanged: (value){
-                      setState((){
-                          user.email=value;}
-                          );
-
+                    onChanged: (value) {
+                      setState(() {
+                        user.email = value;
+                      });
                     },
                     decoration:
                         const InputDecoration(labelText: 'Correo Electrónico'),
@@ -63,9 +63,9 @@ class _RegisterPage extends State<RegisterPage> {
                     },
                   ),
                   TextFormField(
-                    onChanged: (value){
-                      setState((){
-                        user.password=value;
+                    onChanged: (value) {
+                      setState(() {
+                        user.password = value;
                       });
                     },
                     decoration: const InputDecoration(labelText: 'Contraseña'),
@@ -89,16 +89,22 @@ class _RegisterPage extends State<RegisterPage> {
                         minimumSize:
                             MaterialStateProperty.all<Size>(Size(250, 45)),
                         textStyle: MaterialStateProperty.all(
-                            TextStyle(fontFamily: 'Arial')),
+                            const TextStyle(fontFamily: 'Arial')),
                       ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          print(user.toJson());
-                          Future<User> newUser=authProvider.registerUser(user);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text("Registro Exitoso")));
-                          Navigator.pushNamed(context, "/home");
+                          try {
+                            authProvider.registerUser(user).then((value) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text("Registro Exitoso")));
+                              Navigator.pushNamed(context, "/home");
+                            });
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Ocurrió un error")));
+                          }
                         }
                       },
                       child: Text('Registrarse')),

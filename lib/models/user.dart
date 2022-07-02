@@ -18,15 +18,17 @@ class User {
     this.dateCreated,
   });
 
-  Id? id;
-  String? name;
-  String email;
-  String password;
-  String? issuer;
-  DateCreated? dateCreated;
+  Id? id = Id(
+    oid: '',
+  );
+
+  String? name = "";
+  String email = "";
+  String password = "";
+  String? issuer = "";
+  DateCreated? dateCreated = DateCreated(date: 0);
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        id: Id.fromJson(json["_id"]),
         name: json["name"],
         email: json["email"],
         password: json["password"],
@@ -35,12 +37,12 @@ class User {
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": id!.toJson(),
+        "_id": id == null ? "" : id!.toJson(),
         "name": name,
         "email": email,
         "password": password,
         "issuer": issuer,
-        "date_created": dateCreated!.toJson(),
+        "date_created": dateCreated == null ? 0 : dateCreated!.toJson(),
       };
 }
 
@@ -62,10 +64,10 @@ class DateCreated {
 
 class Id {
   Id({
-    required this.oid,
+    this.oid,
   });
 
-  String oid;
+  String? oid;
 
   factory Id.fromJson(Map<String, dynamic> json) => Id(
         oid: json["\u0024oid"],
