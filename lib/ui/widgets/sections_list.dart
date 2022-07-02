@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:hlinog/models/lesson.dart';
 import 'package:hlinog/providers/lessons_provider.dart';

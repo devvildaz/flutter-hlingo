@@ -98,7 +98,7 @@ class _RegisterPage extends State<RegisterPage> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       content: Text("Registro Exitoso")));
-                              Navigator.pushNamed(context, "/home");
+                              Navigator.pushNamed(context, "/login");
                             });
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(

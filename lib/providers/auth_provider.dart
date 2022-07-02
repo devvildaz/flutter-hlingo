@@ -23,6 +23,7 @@ class AuthProvider {
   }
 
   Future<String> loginUser(User newUser) async {
+    print(newUser.toJson());
     final res = await http.post(
       Uri.parse('$baseUrl/login/email'),
       headers: <String, String>{
@@ -34,7 +35,6 @@ class AuthProvider {
       }),
     );
 
-    print(res.statusCode);
     if (res.statusCode == 200) {
       return "OK";
     } else {

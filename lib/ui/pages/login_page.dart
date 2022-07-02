@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hlinog/models/user.dart';
+import 'package:hlinog/providers/auth_provider.dart';
 
 class LoginPage extends StatefulWidget {
   // const LoginPage({Key? key}) : super(key: key);
@@ -11,6 +13,8 @@ class _LoginPage extends State<LoginPage> {
   static final RegExp _emailRegExp = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9\-\_]+(\.[a-zA-Z]+)*$");
   final _formKey = GlobalKey<FormState>();
+  User _user = User(email: "", password: "");
+  final AuthProvider authProvider = AuthProvider();
 
   bool _isEmail(String email) {
     return _emailRegExp.hasMatch(email);
@@ -36,6 +40,11 @@ class _LoginPage extends State<LoginPage> {
                     height: 50,
                   ),
                   TextFormField(
+                    onChanged: (value) {
+                      setState(() {
+                        _user.email = value;
+                      });
+                    },
                     decoration:
                         const InputDecoration(labelText: 'Correo Electrónico'),
                     validator: (value) {
@@ -45,6 +54,11 @@ class _LoginPage extends State<LoginPage> {
                     },
                   ),
                   TextFormField(
+                    onChanged: (value) {
+                      setState(() {
+                        _user.password = value;
+                      });
+                    },
                     obscureText: true,
                     decoration: const InputDecoration(labelText: 'Contraseña'),
                     validator: (value) {
@@ -69,10 +83,12 @@ class _LoginPage extends State<LoginPage> {
                       ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text("Accesando al Sistema")));
-                          Navigator.pushNamed(context, "/home");
+                          authProvider.loginUser(_user).then((value) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Accesando al Sistema")));
+                            Navigator.pushNamed(context, "/home");
+                          });
                         }
                       },
                       child: Text('Iniciar Sesión')),

@@ -62,13 +62,13 @@ class _SearchPageState extends State<SearchPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: const [
                 LessonCard(
-                  title: "a",
+                  title: "Buenos días",
                 ),
                 LessonCard(
-                  title: "a",
+                  title: "Buen día",
                 ),
                 LessonCard(
-                  title: "a",
+                  title: "Buenas",
                 )
               ],
             ),
