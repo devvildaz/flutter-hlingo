@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hlinog/models/user.dart';
+import 'package:hlinog/providers/auth_provider.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -9,6 +11,8 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPage extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+  User user=User(email: "", password: "");
+  final AuthProvider authProvider=AuthProvider();
   static final RegExp _emailRegExp = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9\-\_]+(\.[a-zA-Z]+)*$");
   bool _isEmail(String email) {
@@ -31,7 +35,12 @@ class _RegisterPage extends State<RegisterPage> {
                   ),
                   Image.asset("assets/main_logo.png"),
                   TextFormField(
-                    decoration: const InputDecoration(labelText: 'Nombres'),
+                    onChanged: (value){
+                      setState((){
+                        user.name=value;
+                      });
+                    },
+                    decoration: const InputDecoration(labelText: 'Nombre Completo'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Ingrese sus Nombres';
@@ -39,14 +48,12 @@ class _RegisterPage extends State<RegisterPage> {
                     },
                   ),
                   TextFormField(
-                    decoration: const InputDecoration(labelText: 'Apellidos'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Ingrese sus Apellidos';
-                      }
+                    onChanged: (value){
+                      setState((){
+                          user.email=value;}
+                          );
+
                     },
-                  ),
-                  TextFormField(
                     decoration:
                         const InputDecoration(labelText: 'Correo Electrónico'),
                     validator: (value) {
@@ -56,6 +63,11 @@ class _RegisterPage extends State<RegisterPage> {
                     },
                   ),
                   TextFormField(
+                    onChanged: (value){
+                      setState((){
+                        user.password=value;
+                      });
+                    },
                     decoration: const InputDecoration(labelText: 'Contraseña'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -81,6 +93,8 @@ class _RegisterPage extends State<RegisterPage> {
                       ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
+                          print(user.toJson());
+                          Future<User> newUser=authProvider.registerUser(user);
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content: Text("Registro Exitoso")));
