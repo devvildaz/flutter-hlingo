@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 class LessonsProvider {
   Future<List<Lesson>> getLessons() async {
     final res = await http.get(Uri.parse('$baseUrl/lessons'));
-    print(res.body);
     if (res.statusCode == 200) {
       return json.decode(res.body);
     } else {
