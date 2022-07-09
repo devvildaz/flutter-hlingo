@@ -55,7 +55,7 @@ class _CameraScreenState extends State<CameraScreen> {
                   CameraPreview(_cameraController),
                   const Align(
                       alignment:  Alignment(0.0, -0.8),
-                      child:  InfoFloatContainer(), ,
+                      child:  InfoFloatContainer(),
                   ),
                   Align(
                     alignment: const Alignment(-0.9,0.95),
