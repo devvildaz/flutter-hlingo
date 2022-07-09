@@ -25,7 +25,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           }),
         );
 
-        emit(UserSetState(User.fromJson(json.decode(response.body))));
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          emit(UserSetState(User.fromJson(json.decode(response.body))));
+        } else {
+          emit(const ErrorState('Error de inicio de sesión'));
+        }
       } catch (e) {
         emit(const ErrorState("Error de inicio de sesión"));
       }
@@ -34,7 +38,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<RegisterUser>((event, emit) async {
       emit(const LoadingState());
       try {
-        await http.post(Uri.parse('$baseUrl/register/email'),
+        final response = await http.post(Uri.parse('$baseUrl/register/email'),
             headers: <String, String>{
               'Content-Type': 'application/json',
             },
@@ -43,7 +47,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
               'email': event.email,
               'password': event.password,
             }));
-        emit(const RegisteredState());
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          emit(const RegisteredState());
+        } else {
+          emit(const ErrorState('Error al registrar'));
+        }
       } catch (e) {
         emit(const ErrorState("Error al registrar"));
       }
