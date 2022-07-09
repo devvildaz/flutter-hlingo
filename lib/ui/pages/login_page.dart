@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hlingo/bloc/user/user_bloc.dart';
-import 'package:hlingo/providers/auth_provider.dart';
 
 class LoginData {
   String email;
@@ -25,7 +24,6 @@ class _LoginPage extends State<LoginPage> {
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9\-\_]+(\.[a-zA-Z]+)*$");
   final _formKey = GlobalKey<FormState>();
   final LoginData _user = LoginData(email: "", password: "");
-  final AuthProvider authProvider = AuthProvider();
 
   bool _isEmail(String email) {
     return _emailRegExp.hasMatch(email);
@@ -94,24 +92,35 @@ class _LoginPage extends State<LoginPage> {
                             const TextStyle(
                                 color: Colors.black, fontFamily: 'Arial')),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          authProvider
-                              .loginUser(
-                                  email: _user.email, password: _user.password)
-                              .then((value) {
-                            BlocProvider.of<UserBloc>(context, listen: false)
-                                .add(LoginUser(value));
-
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text("Accesando al Sistema")));
-
-                            Navigator.pushNamed(context, "/home");
-                          });
+                          BlocProvider.of<UserBloc>(context, listen: false).add(
+                              LoginUser(
+                                  email: _user.email,
+                                  password: _user.password));
                         }
                       },
-                      child: const Text('Iniciar Sesión')),
+                      child: BlocListener<UserBloc, UserState>(
+                          listener: (context, state) {
+                            if (state.userState == AuthState.authenticated) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text('Bienvenido'),
+                                backgroundColor: Colors.green,
+                              ));
+
+                              Navigator.of(context)
+                                  .pushReplacementNamed('/home');
+                            }
+                            if (state.userState == AuthState.error) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text('Error al acceder al sistema'),
+                                backgroundColor: Colors.red,
+                              ));
+                            }
+                          },
+                          child: const Text('Iniciar Sesión'))),
                 ],
               ),
             ),

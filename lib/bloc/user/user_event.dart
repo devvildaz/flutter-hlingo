@@ -3,10 +3,20 @@ part of 'user_bloc.dart';
 @immutable
 abstract class UserEvent {}
 
-class LoginUser extends UserEvent {
-  final User user;
+class RegisterUser extends UserEvent {
+  final String name;
+  final String email;
+  final String password;
 
-  LoginUser(this.user);
+  RegisterUser(
+      {required this.name, required this.email, required this.password});
+}
+
+class LoginUser extends UserEvent {
+  final String email;
+  final String password;
+
+  LoginUser({required this.email, required this.password});
 }
 
 class LogoutUser extends UserEvent {}

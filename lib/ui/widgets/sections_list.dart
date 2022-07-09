@@ -106,8 +106,11 @@ class _SectionsListState extends State<SectionsList> {
             }).toList(),
           );
         } else {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return const SizedBox(
+            height: 200,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
         }
       },
