@@ -37,12 +37,9 @@ class User {
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": id == null ? "" : id!.toJson(),
         "name": name,
         "email": email,
         "password": password,
-        "issuer": issuer,
-        "date_created": dateCreated == null ? 0 : dateCreated!.toJson(),
       };
 }
 

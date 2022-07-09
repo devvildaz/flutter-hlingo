@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hlinog/ui/widgets/appbar.dart';
+import 'package:hlingo/ui/widgets/custom_appbar.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -8,8 +8,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppbar(),
-      body:
-      Column(
+      body: Column(
         children: [
           Row(
             children: [
@@ -26,34 +25,28 @@ class ProfilePage extends StatelessWidget {
             children: [
               Expanded(
                   child: Text(
-                    'Miguel Rodriguez',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 24),
-                  )
-              ),
+                'Miguel Rodriguez',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 24),
+              )),
             ],
           ),
           Row(
             children: [
               Expanded(
                   child: Text(
-                    'miguel.rodriguez@altocorreo.com',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
-                  )
-              ),
+                'miguel.rodriguez@altocorreo.com',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 12, color: Colors.grey),
+              )),
             ],
           ),
           SizedBox(height: 50),
-          Row(
-              children: [
-                SizedBox(width: 20),
-                Text(
-                    "Sesiones completadas",
-                    style: TextStyle(fontSize: 16, color: Colors.black)
-                )
-              ]
-          ),
+          Row(children: [
+            SizedBox(width: 20),
+            Text("Sesiones completadas",
+                style: TextStyle(fontSize: 16, color: Colors.black))
+          ]),
           Row(
             children: [
               Container(
@@ -65,31 +58,23 @@ class ProfilePage extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-              children: [
-                SizedBox(width: 20),
-                Container(
-                    width: 350,
-                    height: 20,
-                    child:
-                    Text(
-                      "8/12",
-                      style: TextStyle(fontSize: 12, color: Colors.black),
-                      textAlign: TextAlign.right,
-                    )
-                ),
-              ]
-          ),
+          Row(children: [
+            SizedBox(width: 20),
+            Container(
+                width: 350,
+                height: 20,
+                child: Text(
+                  "8/12",
+                  style: TextStyle(fontSize: 12, color: Colors.black),
+                  textAlign: TextAlign.right,
+                )),
+          ]),
           SizedBox(height: 10),
-          Row(
-              children: [
-                SizedBox(width: 20),
-                Text(
-                    "Puntaje Total",
-                    style: TextStyle(fontSize: 16, color: Colors.black)
-                )
-              ]
-          ),
+          Row(children: [
+            SizedBox(width: 20),
+            Text("Puntaje Total",
+                style: TextStyle(fontSize: 16, color: Colors.black))
+          ]),
           Row(
             children: [
               Container(
@@ -101,28 +86,23 @@ class ProfilePage extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-              children: [
-                SizedBox(width: 20),
-                Container(
-                    width: 350,
-                    height: 20,
-                    child:
-                    Text(
-                      "69/128",
-                      style: TextStyle(fontSize: 12, color: Colors.black),
-                      textAlign: TextAlign.right,
-                    )
-                ),
-              ]
-          ),
+          Row(children: [
+            SizedBox(width: 20),
+            Container(
+                width: 350,
+                height: 20,
+                child: Text(
+                  "69/128",
+                  style: TextStyle(fontSize: 12, color: Colors.black),
+                  textAlign: TextAlign.right,
+                )),
+          ]),
         ],
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () => Navigator.pushNamed(context, "/profile/edit"),
           backgroundColor: Color(0xff3949ab),
-          child: Icon(Icons.border_color, color: Colors.white)
-      ),
+          child: Icon(Icons.border_color, color: Colors.white)),
     );
   }
 }

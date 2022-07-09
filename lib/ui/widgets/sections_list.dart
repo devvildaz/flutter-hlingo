@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hlinog/models/lesson.dart';
-import 'package:hlinog/providers/lessons_provider.dart';
-import 'package:hlinog/ui/widgets/lesson_card.dart';
+import 'package:hlingo/models/lesson.dart';
+import 'package:hlingo/providers/lessons_provider.dart';
+import 'package:hlingo/ui/widgets/lesson_card.dart';
 
 class Category {
   Category({

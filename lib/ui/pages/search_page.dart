@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hlinog/ui/widgets/appbar.dart';
-import 'package:hlinog/ui/widgets/lesson_card.dart';
+import 'package:hlingo/ui/widgets/custom_appbar.dart';
+import 'package:hlingo/ui/widgets/lesson_card.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key? key}) : super(key: key);

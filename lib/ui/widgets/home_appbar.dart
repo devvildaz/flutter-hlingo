@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppbar({Key? key}) : super(key: key);
+class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
+  const HomeAppbar({Key? key}) : super(key: key);
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -43,7 +43,9 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
         IconButton(
           padding: const EdgeInsets.all(2),
           icon: Image.asset("assets/profile.png"),
-          onPressed: () => Navigator.pushNamed(context, '/profile'),
+          onPressed: () {
+            Navigator.pushNamed(context, '/profile');
+          },
           tooltip: "Ir al perfil",
         ),
       ],

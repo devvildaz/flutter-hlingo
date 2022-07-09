@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:hlinog/models/user.dart';
-import 'package:hlinog/utils/constant.dart';
+import 'package:hlingo/models/user.dart';
+import 'package:hlingo/utils/constant.dart';
 import 'package:http/http.dart' as http;
 
 class AuthProvider {

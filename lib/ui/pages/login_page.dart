@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hlinog/models/user.dart';
-import 'package:hlinog/providers/auth_provider.dart';
+import 'package:hlingo/models/user.dart';
+import 'package:hlingo/providers/auth_provider.dart';
 
 class LoginPage extends StatefulWidget {
   // const LoginPage({Key? key}) : super(key: key);

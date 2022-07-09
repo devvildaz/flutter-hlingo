@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:hlinog/models/lesson.dart';
-import 'package:hlinog/utils/constant.dart';
+import 'package:hlingo/models/lesson.dart';
+import 'package:hlingo/utils/constant.dart';
 import 'package:http/http.dart' as http;
 
 class LessonsProvider {

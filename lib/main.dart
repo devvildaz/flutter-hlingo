@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:hlinog/ui/app.dart';
+import 'package:hlingo/ui/app.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
