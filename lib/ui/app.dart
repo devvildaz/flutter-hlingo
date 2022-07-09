@@ -11,10 +11,11 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [BlocProvider(create: (_) => UserBloc())],
       child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'HoloLingo',
-          initialRoute: '/',
-          routes: getRoutes()),
+        debugShowCheckedModeBanner: false,
+        title: 'HoloLingo',
+        initialRoute: '/',
+        routes: getRoutes(),
+      ),
     );
   }
 }

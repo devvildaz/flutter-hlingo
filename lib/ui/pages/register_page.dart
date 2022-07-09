@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hlingo/providers/auth_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hlingo/bloc/user/user_bloc.dart';
 
 class RegisterData {
   String name;
@@ -20,7 +21,6 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPage extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final RegisterData _user = RegisterData(name: "", email: "", password: "");
-  final AuthProvider authProvider = AuthProvider();
   static final RegExp _emailRegExp = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9\-\_]+(\.[a-zA-Z]+)*$");
   bool _isEmail(String email) {
@@ -101,26 +101,34 @@ class _RegisterPage extends State<RegisterPage> {
                       ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          try {
-                            authProvider
-                                .registerUser(
-                                    email: _user.email,
-                                    name: _user.name,
-                                    password: _user.password)
-                                .then((value) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text("Registro Exitoso")));
-                              Navigator.pushNamed(context, "/login");
-                            });
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text("Ocurrió un error")));
-                          }
+                          BlocProvider.of<UserBloc>(context, listen: false).add(
+                              RegisterUser(
+                                  name: _user.name,
+                                  email: _user.email,
+                                  password: _user.password));
                         }
                       },
-                      child: const Text('Registrarse')),
+                      child: BlocListener<UserBloc, UserState>(
+                          listener: ((context, state) {
+                            if (state is RegisteredState) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text('Registro exitoso'),
+                                backgroundColor: Colors.green,
+                              ));
+
+                              Navigator.of(context)
+                                  .pushReplacementNamed('/login');
+                            }
+                            if (state is ErrorState) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(state.error),
+                                backgroundColor: Colors.red,
+                              ));
+                            }
+                          }),
+                          child: const Text('Registrarse')))
                 ],
               ),
             ),
