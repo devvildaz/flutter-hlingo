@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:hlingo/models/user.dart';
 import 'package:hlingo/providers/auth_provider.dart';
+
+class RegisterData {
+  String name;
+  String email;
+  String password;
+
+  RegisterData(
+      {required this.name, required this.email, required this.password});
+}
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -11,7 +19,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPage extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
-  User user = User(email: "", password: "");
+  final RegisterData _user = RegisterData(name: "", email: "", password: "");
   final AuthProvider authProvider = AuthProvider();
   static final RegExp _emailRegExp = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9\-\_]+(\.[a-zA-Z]+)*$");
@@ -24,20 +32,20 @@ class _RegisterPage extends State<RegisterPage> {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: Container(
-          padding: EdgeInsets.only(left: 24, right: 24),
+          padding: const EdgeInsets.only(left: 24, right: 24),
           child: SingleChildScrollView(
             child: Form(
               key: _formKey,
               child: Column(
                 children: <Widget>[
-                  SizedBox(
+                  const SizedBox(
                     height: 25,
                   ),
                   Image.asset("assets/main_logo.png"),
                   TextFormField(
                     onChanged: (value) {
                       setState(() {
-                        user.name = value;
+                        _user.name = value;
                       });
                     },
                     decoration:
@@ -51,7 +59,7 @@ class _RegisterPage extends State<RegisterPage> {
                   TextFormField(
                     onChanged: (value) {
                       setState(() {
-                        user.email = value;
+                        _user.email = value;
                       });
                     },
                     decoration:
@@ -65,7 +73,7 @@ class _RegisterPage extends State<RegisterPage> {
                   TextFormField(
                     onChanged: (value) {
                       setState(() {
-                        user.password = value;
+                        _user.password = value;
                       });
                     },
                     decoration: const InputDecoration(labelText: 'Contraseña'),
@@ -76,7 +84,7 @@ class _RegisterPage extends State<RegisterPage> {
                     },
                     obscureText: true,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 50,
                   ),
                   ElevatedButton(
@@ -84,17 +92,22 @@ class _RegisterPage extends State<RegisterPage> {
                         backgroundColor:
                             MaterialStateProperty.all(Colors.indigo[600]),
                         foregroundColor: MaterialStateProperty.all<Color>(
-                          Color(0xffffffff),
+                          const Color(0xffffffff),
                         ),
-                        minimumSize:
-                            MaterialStateProperty.all<Size>(Size(250, 45)),
+                        minimumSize: MaterialStateProperty.all<Size>(
+                            const Size(250, 45)),
                         textStyle: MaterialStateProperty.all(
                             const TextStyle(fontFamily: 'Arial')),
                       ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           try {
-                            authProvider.registerUser(user).then((value) {
+                            authProvider
+                                .registerUser(
+                                    email: _user.email,
+                                    name: _user.name,
+                                    password: _user.password)
+                                .then((value) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       content: Text("Registro Exitoso")));
@@ -107,7 +120,7 @@ class _RegisterPage extends State<RegisterPage> {
                           }
                         }
                       },
-                      child: Text('Registrarse')),
+                      child: const Text('Registrarse')),
                 ],
               ),
             ),

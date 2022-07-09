@@ -1,19 +1,21 @@
 import 'dart:convert';
-
 import 'package:hlingo/models/user.dart';
 import 'package:hlingo/utils/constant.dart';
 import 'package:http/http.dart' as http;
 
 class AuthProvider {
-  Future<String> registerUser(User newUser) async {
+  Future<String> registerUser(
+      {required String name,
+      required String email,
+      required String password}) async {
     final res = await http.post(Uri.parse('$baseUrl/register/email'),
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
         body: jsonEncode(<String, String>{
-          'name': newUser.name!,
-          'email': newUser.email,
-          'password': newUser.password,
+          'name': name,
+          'email': email,
+          'password': password,
         }));
     if (res.statusCode == 200 || res.statusCode == 201) {
       return "OK";
@@ -22,21 +24,21 @@ class AuthProvider {
     }
   }
 
-  Future<String> loginUser(User newUser) async {
-    print(newUser.toJson());
+  Future<User> loginUser(
+      {required String email, required String password}) async {
     final res = await http.post(
       Uri.parse('$baseUrl/login/email'),
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
       body: jsonEncode(<String, String>{
-        'email': newUser.email,
-        'password': newUser.password,
+        'email': email,
+        'password': password,
       }),
     );
 
     if (res.statusCode == 200) {
-      return "OK";
+      return User.fromJson(json.decode(res.body));
     } else {
       throw Exception('Error Signing in');
     }

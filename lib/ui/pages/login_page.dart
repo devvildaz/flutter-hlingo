@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:hlingo/models/user.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hlingo/bloc/user/user_bloc.dart';
 import 'package:hlingo/providers/auth_provider.dart';
 
+class LoginData {
+  String email;
+  String password;
+
+  LoginData({
+    required this.email,
+    required this.password,
+  });
+}
+
 class LoginPage extends StatefulWidget {
-  // const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPage();
@@ -13,7 +24,7 @@ class _LoginPage extends State<LoginPage> {
   static final RegExp _emailRegExp = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9\-\_]+(\.[a-zA-Z]+)*$");
   final _formKey = GlobalKey<FormState>();
-  User _user = User(email: "", password: "");
+  final LoginData _user = LoginData(email: "", password: "");
   final AuthProvider authProvider = AuthProvider();
 
   bool _isEmail(String email) {
@@ -51,6 +62,7 @@ class _LoginPage extends State<LoginPage> {
                       if (!_isEmail(value.toString())) {
                         return 'Ingrese un correo electrónico válido';
                       }
+                      return null;
                     },
                   ),
                   TextFormField(
@@ -65,6 +77,7 @@ class _LoginPage extends State<LoginPage> {
                       if (value!.isEmpty) {
                         return 'Ingrese una contraseña válida';
                       }
+                      return null;
                     },
                   ),
                   const SizedBox(
@@ -83,15 +96,22 @@ class _LoginPage extends State<LoginPage> {
                       ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          authProvider.loginUser(_user).then((value) {
+                          authProvider
+                              .loginUser(
+                                  email: _user.email, password: _user.password)
+                              .then((value) {
+                            BlocProvider.of<UserBloc>(context, listen: false)
+                                .add(LoginUser(value));
+
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text("Accesando al Sistema")));
+
                             Navigator.pushNamed(context, "/home");
                           });
                         }
                       },
-                      child: Text('Iniciar Sesión')),
+                      child: const Text('Iniciar Sesión')),
                 ],
               ),
             ),
