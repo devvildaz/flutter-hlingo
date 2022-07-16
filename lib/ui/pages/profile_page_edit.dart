@@ -107,6 +107,10 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                           var nombre = value.toString();
                           if (!_esLetra(nombre)) {
                             return "Solo se permiten letras";
+                          } else {
+                            setState(() {
+                              _userName = nombre;
+                            });
                           }
                         },
                         textAlign: TextAlign.left,
