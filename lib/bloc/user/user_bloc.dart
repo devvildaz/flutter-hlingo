@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:hlingo/models/user.dart';
 import 'package:hlingo/utils/constant.dart';
+import 'package:hlingo/utils/user_storage.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,7 +27,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         );
 
         if (response.statusCode == 200 || response.statusCode == 201) {
-          emit(UserSetState(User.fromJson(json.decode(response.body))));
+          final user = User.fromJson(json.decode(response.body));
+
+          await UserStorage.setUserData(name: user.name, email: user.email);
+          emit(UserSetState(user));
         } else {
           emit(const ErrorState('Error de inicio de sesión'));
         }
@@ -58,6 +62,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       }
     });
 
-    on<LogoutUser>((event, emit) => emit(const UserInitialState()));
+    on<LogoutUser>((event, emit) async {
+      await UserStorage.deleteUserData();
+
+      emit(const UserInitialState());
+    });
   }
 }
