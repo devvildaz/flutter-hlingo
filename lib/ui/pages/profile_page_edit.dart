@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hlingo/ui/widgets/custom_appbar.dart';
 
+import 'package:hlingo/models/user.dart';
+import 'package:hlingo/providers/user_provider.dart';
+
 class ProfilePageEdit extends StatefulWidget {
   //const ProfilePageEdit({Key? key}) : super(key: key);
 
@@ -13,6 +16,11 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
   static final RegExp _emailRegExp = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9\-\_]+(\.[a-zA-Z]+)*$");
   final _formKey = GlobalKey<FormState>();
+
+  UserProvider userProvider = UserProvider();
+  List<User> _userList = List<User>.empty();
+  String _userId = '';
+  String _userName = '';
 
   bool _esLetra(String str) {
     return _letraRegExp.hasMatch(str);
@@ -106,10 +114,8 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                       )),
                 ],
               ),
-              const SizedBox(
-                height: 8,
-              ),
-              Row(
+              const SizedBox(height: 8),
+              /*Row(
                 children: const [
                   SizedBox(width: 20),
                   SizedBox(
@@ -152,9 +158,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                       )),
                 ],
               ),
-              const SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),*/
               Row(
                 children: const [
                   SizedBox(width: 20),
@@ -197,9 +201,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                       )),
                 ],
               ),
-              const SizedBox(
-                height: 110,
-              ),
+              const SizedBox(height: 110),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -213,6 +215,14 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       content: Text("Guardando cambios ...")));
+                            }
+
+                            if (_formKey.currentState!.validate()) {
+                              userProvider
+                                .updateUser(_userId, _userName)
+                                .then((user) => {
+                                  setState(() { _userList = user; })
+                              });
                             }
                           },
                           child: (const Text(
