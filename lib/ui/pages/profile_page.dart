@@ -95,8 +95,26 @@ class ProfilePage extends StatelessWidget {
                   textAlign: TextAlign.right,
                 )),
           ]),
+          const SizedBox(height: 40),
+          Row(children:  [
+            SizedBox(width: 20),
+            SizedBox(
+                width: 350,
+                height: 20,
+                child:
+              ElevatedButton(style:
+                  ButtonStyle(
+                      backgroundColor:MaterialStateProperty.all(Colors.red[900]),foregroundColor: MaterialStateProperty.all<Color>(const Color(0xffffffff))),
+                  onPressed: () {
+                    BlocProvider.of<UserBloc>(context, listen: false).add(LogoutUser());
+                    Navigator.of(context).pushReplacementNamed('/');
+                    }
+                  , child: Text("Cerrar Sesión"))
+            ),
+          ]),
         ],
       ),
+
       floatingActionButton: FloatingActionButton(
           onPressed: () => Navigator.pushNamed(context, "/profile/edit"),
           backgroundColor: const Color(0xff3949ab),
