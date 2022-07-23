@@ -19,4 +19,10 @@ class LoginUser extends UserEvent {
   LoginUser({required this.email, required this.password});
 }
 
-class LogoutUser extends UserEvent {}
+class LogoutUser extends UserEvent {
+  final BuildContext context;
+
+  LogoutUser(this.context);
+}
+
+class InitUser extends UserEvent {}

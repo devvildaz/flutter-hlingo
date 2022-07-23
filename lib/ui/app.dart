@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'HoloLingo',
         initialRoute: '/',
-        routes: getRoutes(),
+        routes: Routes.getRoutes(),
       ),
     );
   }

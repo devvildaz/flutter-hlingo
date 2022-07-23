@@ -31,9 +31,11 @@ class _SectionsListState extends State<SectionsList> {
     super.initState();
     final lessons = LessonsProvider().getLessons();
     lessons.then((lessons) {
-      setState(() {
-        _sections = _createSections(lessons);
-      });
+      if (mounted) {
+        setState(() {
+          _sections = _createSections(lessons);
+        });
+      }
     });
   }
 

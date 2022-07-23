@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:hlingo/models/user.dart';
 import 'package:hlingo/utils/constant.dart';
 import 'package:hlingo/utils/user_storage.dart';
@@ -62,10 +63,24 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       }
     });
 
+    on<InitUser>(((event, emit) async {
+      final userData = await UserStorage.getUserData();
+      if (userData != null) {
+        print("cargando datos");
+        emit(UserSetState(User(
+          name: userData.email,
+          email: userData.name,
+        )));
+      } else {
+        emit(const UserInitialState());
+      }
+    }));
+
     on<LogoutUser>((event, emit) async {
       await UserStorage.deleteUserData();
-
-      emit(const UserInitialState());
+      Navigator.of(event.context)
+          .pushReplacementNamed('/')
+          .then((value) => emit(const UserInitialState()));
     });
   }
 }
