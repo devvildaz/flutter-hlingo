@@ -10,18 +10,21 @@ String userToJson(User data) => json.encode(data.toJson());
 
 class User {
   User({
+    this.id,
     required this.name,
     required this.email,
     this.password,
     this.issuer,
   });
 
+  String? id;
   String name;
   String email;
   String? password = "";
   String? issuer = "";
 
   factory User.fromJson(Map<String, dynamic> json) => User(
+        id: json["id"],
         name: json["name"],
         email: json["email"],
         issuer: json["issuer"],
@@ -32,10 +35,4 @@ class User {
         "email": email,
         "password": password,
       };
-
-  User copyWith({
-    String? name,
-    String? email,
-  }) =>
-      User(name: name ?? this.name, email: email ?? this.email);
 }
