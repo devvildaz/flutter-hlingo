@@ -8,41 +8,42 @@ import 'package:video_player/video_player.dart';
 class CameraPage extends StatefulWidget {
   const CameraPage({ Key? key }) : super(key: key);
 
-  _CameraPageState createState() => _CameraPageState();
+  @override
+  State<CameraPage> createState() => _CameraPageState();
 }
 
-class _CameraPageState extends State<CameraPage> {
+class _CameraPageState extends State<CameraPage>  with WidgetsBindingObserver{
   CameraController? controller;
   bool _isCameraInitialized = false;
 
   void onNewCameraSelected(CameraDescription cameraDescription) async {
-    final previousCameraController = controller;
+    final CameraController? previousCameraController = controller; // capture the previous controller
     final CameraController cameraController = CameraController(
-        cameraDescription,
-        ResolutionPreset.high,
+        cameraDescription, // get the camera description (metadata for the camera)
+        ResolutionPreset.high, // High resolution
     );
 
-    await previousCameraController?.dispose();
+    await previousCameraController?.dispose(); // dispose previous camera controller || release the camera's resources
 
-    if(mounted) {
-      setState(() {
-        controller = cameraController;
+    if(mounted) { // only if the component is mounted
+      setState(() { // trigger a re-render
+        controller = cameraController; // set the new camera controller
       });
     }
 
-    cameraController.addListener(() {
-      if(mounted) setState(() {});
+    cameraController.addListener(() { // attach a listener when the object (cameraController is changed)
+      if(mounted) setState(() {}); // re-build the widget
     });
 
     try {
-      await cameraController.initialize();
+      await cameraController.initialize(); // initialize the camera
     } on CameraException catch(e) {
-      print('Error initializing camera: $e');
+      print('Error initializing camera: $e'); // handling error
     }
 
-    if(mounted) {
+    if(mounted) { // only component is mounted
       setState(() {
-        _isCameraInitialized = controller!.value.isInitialized;
+        _isCameraInitialized = controller?.value.isInitialized ?? false; //
       });
     }
   }
@@ -61,14 +62,14 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    final CameraController? cameraController = controller;
-    if(cameraController == null || !cameraController.value.isInitialized){
+    final CameraController? cameraController = controller; // get the controller
+    if(cameraController == null || !cameraController.value.isInitialized){  // if null and is not initialized
       return;
     }
-    if(state == AppLifecycleState.inactive) {
-      cameraController.dispose();
-    } else if (state == AppLifecycleState.resumed) {
-      onNewCameraSelected(cameraController.description);
+    if(state == AppLifecycleState.inactive) { // if state is inactive
+      cameraController.dispose(); // dispose
+    } else if (state == AppLifecycleState.resumed) { // if app is resumed
+      onNewCameraSelected(cameraController.description); // re init the camera
     }
   }
 
@@ -79,7 +80,8 @@ class _CameraPageState extends State<CameraPage> {
 
         ),
         child: Center(
-          child: Stack(
+          child: (controller != null && _isCameraInitialized) ?
+          Stack(
             children: [
               Center(
                 child: AspectRatio(
@@ -96,8 +98,8 @@ class _CameraPageState extends State<CameraPage> {
                         child: const Text(
                             "Graba un fragmento de 2 segundos",
                             style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black
+                                fontSize: 16,
+                                color: Colors.black
                             )
                         ),
                       )
@@ -111,35 +113,34 @@ class _CameraPageState extends State<CameraPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  fixedSize: const Size(30, 30),
-                                  shape: const CircleBorder()
-                                ),
-                                child: const Icon(Icons.arrow_back),
-                              ),
-                              Spacer(),
-                              RecordingButton(
-                                startedRecording: () async {
-                                  await controller?.prepareForVideoRecording();
-                                  await controller?.startVideoRecording();
-                                },
-                                terminatedRecording: () async {
-                                  final file = await controller?.stopVideoRecording();
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            style: ElevatedButton.styleFrom(
+                                fixedSize: const Size(30, 30),
+                                shape: const CircleBorder()
+                            ),
+                            child: const Icon(Icons.arrow_back),
+                          ),
 
-                                  Navigator.pop(context, file?.path ?? 'undefined');
-                                }),
-                                Spacer(),
-                              ],
+                          RecordingButton(
+                              startedRecording: () async {
+                                await controller?.prepareForVideoRecording();
+                                await controller?.startVideoRecording();
+                              },
+                              terminatedRecording: () async {
+                                final file = await controller?.stopVideoRecording();
+
+                                Navigator.pop(context, file?.path ?? "");
+                              }),
+                        ],
                       )
                   )
                 ],
               )
             ],
-          ),
+          ) : const CircularProgressIndicator()
         )
     );
   }
