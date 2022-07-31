@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
@@ -44,7 +45,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.all(2),
           icon: Image.asset("assets/profile.png"),
           onPressed: () {
-            Navigator.pushNamed(context, '/profile');
+            AutoRouter.of(context).pushNamed("/profile");
           },
           tooltip: "Ir al perfil",
         ),

@@ -1,9 +1,15 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hlingo/ui/widgets/logo.dart';
 
-class LandingPage extends StatelessWidget {
+class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
 
+  @override
+  State<LandingPage> createState() => _LandingPageState();
+}
+
+class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     const signInTxt = 'Iniciar sesión';
@@ -29,7 +35,7 @@ class LandingPage extends StatelessWidget {
               padding: const EdgeInsets.only(top: 150),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/login');
+                  AutoRouter.of(context).pushNamed("/login");
                 },
                 style: elevatedButtonStyle,
                 child: const Text(signInTxt, style: txtStyle),
@@ -39,7 +45,7 @@ class LandingPage extends StatelessWidget {
               padding: const EdgeInsets.only(top: 15),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/register');
+                  AutoRouter.of(context).pushNamed("/register");
                 },
                 style: elevatedButtonStyle,
                 child: const Text(registerTxt, style: txtStyle),

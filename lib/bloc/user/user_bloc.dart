@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hlingo/models/user.dart';
@@ -28,8 +29,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
         if (response.statusCode == 200 || response.statusCode == 201) {
           final user = User.fromJson(json.decode(response.body));
-
-          print(response.body);
 
           await UserStorage.setUserData(
               id: user.id!, name: user.name, email: user.email);
@@ -66,6 +65,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     });
 
     on<InitUser>(((event, emit) async {
+      print("init");
       final userData = await UserStorage.getUserData();
       if (userData != null) {
         print("cargando datos");
@@ -81,8 +81,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
     on<LogoutUser>((event, emit) async {
       await UserStorage.deleteUserData();
-      Navigator.of(event.context)
-          .pushReplacementNamed('/')
+      AutoRouter.of(event.context)
+          .pushNamed('/')
           .then((value) => emit(const UserInitialState()));
     });
   }

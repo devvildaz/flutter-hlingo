@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hlingo/bloc/user/user_bloc.dart';
@@ -108,9 +109,7 @@ class _LoginPage extends State<LoginPage> {
                                 content: Text('Bienvenido'),
                                 backgroundColor: Colors.green,
                               ));
-
-                              Navigator.of(context)
-                                  .pushReplacementNamed('/home');
+                              AutoRouter.of(context).pushNamed("/home");
                             }
                             if (state.userState == AuthState.error) {
                               ScaffoldMessenger.of(context)

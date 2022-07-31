@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hlingo/ui/widgets/custom_appbar.dart';
 
 class ProfilePageEdit extends StatefulWidget {
-  //const ProfilePageEdit({Key? key}) : super(key: key);
+  const ProfilePageEdit({Key? key}) : super(key: key);
 
   @override
   State<ProfilePageEdit> createState() => _ProfilePageEditState();

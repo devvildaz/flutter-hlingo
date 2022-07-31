@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hlingo/ui/widgets/home_appbar.dart';
 import 'package:hlingo/ui/widgets/sections_list.dart';
@@ -13,7 +14,7 @@ class HomePage extends StatelessWidget {
       body: const SingleChildScrollView(child: SectionsList()),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.indigo[600],
-        onPressed: () => Navigator.pushNamed(context, '/search'),
+        onPressed: () => AutoRouter.of(context).pushNamed("/search"),
         child: const Icon(Icons.search),
       ),
     );
