@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hlingo/bloc/user/user_bloc.dart';
+import 'package:hlingo/providers/user_provider.dart';
 import 'package:hlingo/ui/widgets/custom_appbar.dart';
+import 'package:hlingo/models/user.dart';
 
 class ProfilePageEdit extends StatefulWidget {
   const ProfilePageEdit({Key? key}) : super(key: key);
@@ -13,6 +17,11 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
   static final RegExp _emailRegExp = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9\-\_]+(\.[a-zA-Z]+)*$");
   final _formKey = GlobalKey<FormState>();
+
+  UserProvider userProvider= UserProvider();
+  List<User> _userList = List<User>.empty();
+  String _userName = '';
+  String _userEmail = '';
 
   bool _esLetra(String str) {
     return _letraRegExp.hasMatch(str);
@@ -29,7 +38,8 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          child: Column(
+          child:
+          Column(
             children: [
               Row(
                 children: [
@@ -42,26 +52,33 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                   )
                 ],
               ),
-              Row(
-                children: const [
-                  Expanded(
+              BlocBuilder<UserBloc, UserState>(builder: (_, state) {
+                return Row(
+                  children: [
+                    Expanded(
+                      child:
+                      Text(
+                        state.user!.name,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 24),
+                      )
+                    ),
+                  ],
+                );
+              }),
+              BlocBuilder<UserBloc, UserState>(builder: (_, state) {
+                return Row(
+                  children: [
+                    Expanded(
                       child: Text(
-                    'Miguel Rodriguez',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 24),
-                  )),
-                ],
-              ),
-              Row(
-                children: const [
-                  Expanded(
-                      child: Text(
-                    'miguel.rodriguez@altocorreo.com',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
-                  )),
-                ],
-              ),
+                        state.user!.email,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      )
+                    ),
+                  ],
+                );
+              }),
               const SizedBox(height: 55),
               Row(
                 children: const [
@@ -83,73 +100,35 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                 children: [
                   const SizedBox(width: 20),
                   Container(
-                      width: 350,
-                      height: 40,
-                      alignment: Alignment.center,
-                      child: TextFormField(
-                        decoration: const InputDecoration(
+                    width: 350,
+                    height: 40,
+                    alignment: Alignment.center,
+                    child:
+                    BlocBuilder<UserBloc, UserState>(builder: (_, state) {
+                      return TextFormField(
+                        decoration: InputDecoration(
                           border: InputBorder.none,
-                          contentPadding: EdgeInsets.only(
+                          contentPadding: const EdgeInsets.only(
                             left: 10,
                             bottom: 20,
                           ),
-                          hintText: "Miguel Angel",
+                          hintText: state.user!.name,
                         ),
                         validator: (value) {
                           var nombre = value.toString();
                           if (!_esLetra(nombre)) {
                             return "Solo se permiten letras";
+                          } else if (value != null) {
+                            _userName = value;
+                          } else {
+                            _userName = state.user!.name;
                           }
                         },
                         textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 15, color: Colors.black),
-                      )),
-                ],
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Row(
-                children: const [
-                  SizedBox(width: 20),
-                  SizedBox(
-                      width: 350,
-                      height: 20,
-                      child: Text(
-                        "Apellidos",
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                      )),
-                ],
-              ),
-              Row(
-                children: [
-                  const SizedBox(width: 20),
-                  Container(
-                      width: 350,
-                      height: 40,
-                      alignment: Alignment.center,
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.only(
-                            left: 10,
-                            bottom: 20,
-                          ),
-                          hintText: "Rodriguez Tocas",
-                        ),
-                        validator: (value) {
-                          var apellido = value.toString();
-                          if (!_esLetra(apellido)) {
-                            return "Solo se permiten letras";
-                          }
-                        },
-                        textAlign: TextAlign.left,
-                        style:
-                            const TextStyle(fontSize: 15, color: Colors.black),
-                      )),
+                        style: const TextStyle(fontSize: 15, color: Colors.black),
+                      );
+                    }),
+                  ),
                 ],
               ),
               const SizedBox(
@@ -174,27 +153,35 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                 children: [
                   const SizedBox(width: 20),
                   Container(
-                      width: 350,
-                      height: 40,
-                      alignment: Alignment.center,
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.only(
-                            left: 10,
-                            bottom: 20,
+                    width: 350,
+                    height: 40,
+                    alignment: Alignment.center,
+                    child:
+                      BlocBuilder<UserBloc, UserState>(builder: (_, state) {
+                        return TextFormField(
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.only(
+                              left: 10,
+                              bottom: 20,
+                            ),
+                            hintText: state.user!.email,
                           ),
-                          hintText: "miguel.rodriguez@altocorreo.com",
-                        ),
-                        validator: (value) {
-                          var correo = value.toString();
-                          if (_esEmail(correo)) {
-                            return "Ingrese un correo";
-                          }
-                        },
-                        textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 15, color: Colors.black),
-                      )),
+                          validator: (value) {
+                            var correo = value.toString();
+                            if (_esEmail(correo)) {
+                              return "Ingrese un correo";
+                            } else if (value != null) {
+                              _userEmail = value;
+                            } else {
+                              _userEmail = state.user!.email;
+                            }
+                          },
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(fontSize: 15, color: Colors.black),
+                        );
+                      }),
+                    ),
                 ],
               ),
               const SizedBox(
@@ -205,14 +192,22 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                      width: 350,
-                      height: 45,
-                      child: ElevatedButton(
+                    width: 350,
+                    height: 45,
+                    child:
+                      BlocBuilder<UserBloc, UserState>(builder: (_, state) {
+                        return ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text("Guardando cambios ...")));
+                                const SnackBar(content: Text("Guardando cambios ..."))
+                              );
+                              userProvider
+                                .updateUser(state., _userName, _userEmail)
+                                .then((user) => {
+                                  setState(() { _userList = user; })
+                                }
+                              );
                             }
                           },
                           child: (const Text(
@@ -221,7 +216,11 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                           )),
                           style: ElevatedButton.styleFrom(
                             primary: const Color(0xff3949ab),
-                          )))
+                          )
+                        );
+                      }
+                    ),
+                  )
                 ],
               )
             ],
