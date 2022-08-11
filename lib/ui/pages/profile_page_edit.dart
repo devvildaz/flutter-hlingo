@@ -202,12 +202,14 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(content: Text("Guardando cambios ..."))
                               );
+                              /*
                               userProvider
                                 .updateUser(state., _userName, _userEmail)
                                 .then((user) => {
                                   setState(() { _userList = user; })
                                 }
                               );
+                              */
                             }
                           },
                           child: (const Text(

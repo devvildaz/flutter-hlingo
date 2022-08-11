@@ -66,24 +66,24 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
     on<InitUser>(((event, emit) async {
       print("init");
-      final userData = await UserStorage.getUserData();
-      if (userData != null) {
+      final userData = await UserStorage.getUserData(); // obtencion de las credenciales del local storage
+      if (userData != null) { // en caso que las credenciales existan
         print("cargando datos");
-        emit(UserSetState(User(
+        emit(UserSetState(User( // cambiar el estado a UserSetState
           id: userData.id,
           name: userData.email,
           email: userData.name,
         )));
       } else {
-        emit(const UserInitialState());
+        emit(const UserInitialState()); // cambiar al estado inicial
       }
     }));
 
     on<LogoutUser>((event, emit) async {
-      await UserStorage.deleteUserData();
+      await UserStorage.deleteUserData(); // eliminacion de las credenciales presentes en el local storage
       AutoRouter.of(event.context)
-          .pushNamed('/')
-          .then((value) => emit(const UserInitialState()));
+          .pushNamed('/') // redireccion a '/'
+          .then((value) => emit(const UserInitialState())); // cambio al estado inicial
     });
   }
 }
