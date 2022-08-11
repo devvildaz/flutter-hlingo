@@ -1,164 +1,231 @@
 import 'package:flutter/material.dart';
-import 'package:hlinog/ui/widgets/appbar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hlingo/bloc/user/user_bloc.dart';
+import 'package:hlingo/providers/user_provider.dart';
+import 'package:hlingo/ui/widgets/custom_appbar.dart';
+import 'package:hlingo/models/user.dart';
 
-class ProfilePageEdit extends StatelessWidget {
+class ProfilePageEdit extends StatefulWidget {
   const ProfilePageEdit({Key? key}) : super(key: key);
+
+  @override
+  State<ProfilePageEdit> createState() => _ProfilePageEditState();
+}
+
+class _ProfilePageEditState extends State<ProfilePageEdit> {
+  static final RegExp _letraRegExp = RegExp(r'^[a-zA-Z0-9_\-=@,\.;]+$');
+  static final RegExp _emailRegExp = RegExp(
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9\-\_]+(\.[a-zA-Z]+)*$");
+  final _formKey = GlobalKey<FormState>();
+
+  UserProvider userProvider= UserProvider();
+  List<User> _userList = List<User>.empty();
+  String _userName = '';
+  String _userEmail = '';
+
+  bool _esLetra(String str) {
+    return _letraRegExp.hasMatch(str);
+  }
+
+  bool _esEmail(String str) {
+    return _emailRegExp.hasMatch(str);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppbar(),
-      body:
-      Column(
-        children: [
-          Row(
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child:
+          Column(
             children: [
-              Expanded(
-                child: Image.asset(
-                  'assets/profile.png',
-                  width: 200.0,
-                  height: 200.0,
-                ),
-              )
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                  child: Text(
-                    'Miguel Rodriguez',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: Image.asset(
+                      'assets/profile.png',
+                      width: 200.0,
+                      height: 200.0,
+                    ),
                   )
+                ],
               ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                  child: Text(
-                    'miguel.rodriguez@altocorreo.com',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
-                  )
+              BlocBuilder<UserBloc, UserState>(builder: (_, state) {
+                return Row(
+                  children: [
+                    Expanded(
+                      child:
+                      Text(
+                        state.user!.name,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 24),
+                      )
+                    ),
+                  ],
+                );
+              }),
+              BlocBuilder<UserBloc, UserState>(builder: (_, state) {
+                return Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        state.user!.email,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      )
+                    ),
+                  ],
+                );
+              }),
+              const SizedBox(height: 55),
+              Row(
+                children: const [
+                  SizedBox(width: 20),
+                  SizedBox(
+                      width: 350,
+                      height: 20,
+                      child: Text(
+                        "Nombres",
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.left,
+                      )),
+                ],
               ),
-            ],
-          ),
-          SizedBox(height: 55),
-          Row(
-            children: [
-              SizedBox(width: 20),
-              Container(
-                  width: 350,
-                  height: 30,
-                  child:
-                  Text(
-                    "Nombres",
-                    style: TextStyle(fontSize: 15, color: Colors.black),
-                    textAlign: TextAlign.left,
-                  )
+              Row(
+                children: [
+                  const SizedBox(width: 20),
+                  Container(
+                    width: 350,
+                    height: 40,
+                    alignment: Alignment.center,
+                    child:
+                    BlocBuilder<UserBloc, UserState>(builder: (_, state) {
+                      return TextFormField(
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.only(
+                            left: 10,
+                            bottom: 20,
+                          ),
+                          hintText: state.user!.name,
+                        ),
+                        validator: (value) {
+                          var nombre = value.toString();
+                          if (!_esLetra(nombre)) {
+                            return "Solo se permiten letras";
+                          } else if (value != null) {
+                            _userName = value;
+                          } else {
+                            _userName = state.user!.name;
+                          }
+                        },
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(fontSize: 15, color: Colors.black),
+                      );
+                    }),
+                  ),
+                ],
               ),
-            ],
-          ),
-          Row(
-            children: [
-              SizedBox(width: 30),
-              Container(
-                  width: 350,
-                  height: 45,
-                  child:
-                  Text(
-                    "Miguel Angel",
-                    style: TextStyle(fontSize: 15, color: Colors.grey),
-                    textAlign: TextAlign.left,
-                  )
+              const SizedBox(
+                height: 8,
               ),
-            ],
-          ),
-          Row(
-            children: [
-              SizedBox(width: 20),
-              Container(
-                  width: 350,
-                  height: 30,
-                  child:
-                  Text(
-                    "Apellidos",
-                    style: TextStyle(fontSize: 15, color: Colors.black),
-                    textAlign: TextAlign.left,
-                  )
+              Row(
+                children: const [
+                  SizedBox(width: 20),
+                  SizedBox(
+                      width: 350,
+                      height: 20,
+                      child: Text(
+                        "Correo Electrónico",
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ],
               ),
-            ],
-          ),
-          Row(
-            children: [
-              SizedBox(width: 30),
-              Container(
-                  width: 350,
-                  height: 45,
-                  child:
-                  Text(
-                    "Rodriguez Tocas",
-                    style: TextStyle(fontSize: 15, color: Colors.grey),
-                    textAlign: TextAlign.left,
-                  )
+              Row(
+                children: [
+                  const SizedBox(width: 20),
+                  Container(
+                    width: 350,
+                    height: 40,
+                    alignment: Alignment.center,
+                    child:
+                      BlocBuilder<UserBloc, UserState>(builder: (_, state) {
+                        return TextFormField(
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.only(
+                              left: 10,
+                              bottom: 20,
+                            ),
+                            hintText: state.user!.email,
+                          ),
+                          validator: (value) {
+                            var correo = value.toString();
+                            if (_esEmail(correo)) {
+                              return "Ingrese un correo";
+                            } else if (value != null) {
+                              _userEmail = value;
+                            } else {
+                              _userEmail = state.user!.email;
+                            }
+                          },
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(fontSize: 15, color: Colors.black),
+                        );
+                      }),
+                    ),
+                ],
               ),
-            ],
-          ),
-          Row(
-            children: [
-              SizedBox(width: 20),
-              Container(
-                  width: 350,
-                  height: 30,
-                  child:
-                  Text(
-                    "Correo Electrónico",
-                    style: TextStyle(fontSize: 15, color: Colors.black),
-                    textAlign: TextAlign.left,
-                  )
+              const SizedBox(
+                height: 110,
               ),
-            ],
-          ),
-          Row(
-            children: [
-              SizedBox(width: 30),
-              Container(
-                  width: 350,
-                  height: 65,
-                  child:
-                  Text(
-                    "miguel.rodriguez@altocorreo.com",
-                    style: TextStyle(fontSize: 15, color: Colors.grey),
-                    textAlign: TextAlign.left,
-                  )
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                  width: 350,
-                  height: 45,
-                  child:
-                  ElevatedButton(
-                      onPressed: (){},
-                      child: (
-                          Text(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 350,
+                    height: 45,
+                    child:
+                      BlocBuilder<UserBloc, UserState>(builder: (_, state) {
+                        return ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text("Guardando cambios ..."))
+                              );
+                              userProvider
+                                .updateUser(state., _userName, _userEmail)
+                                .then((user) => {
+                                  setState(() { _userList = user; })
+                                }
+                              );
+                            }
+                          },
+                          child: (const Text(
                             "Actualizar Datos",
                             style: TextStyle(fontSize: 20),
+                          )),
+                          style: ElevatedButton.styleFrom(
+                            primary: const Color(0xff3949ab),
                           )
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: Color(0xff3949ab),
-                      )
+                        );
+                      }
+                    ),
                   )
+                ],
               )
             ],
-          )
-        ],
+          ),
+        ),
       ),
     );
   }
@@ -168,13 +235,13 @@ class OpenPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     var paint1 = Paint()
-      ..color = Color(0xffededed)
+      ..color = const Color(0xffededed)
       ..style = PaintingStyle.fill;
     var paint2 = Paint()
-      ..color = Color(0xff1a237e)
+      ..color = const Color(0xff1a237e)
       ..style = PaintingStyle.fill;
-    canvas.drawRect(Offset(20, 0) & Size(350, 20), paint1);
-    canvas.drawRect(Offset(20, 0) & Size(220, 20), paint2);
+    canvas.drawRect(const Offset(20, 0) & const Size(350, 20), paint1);
+    canvas.drawRect(const Offset(20, 0) & const Size(220, 20), paint2);
   }
 
   @override

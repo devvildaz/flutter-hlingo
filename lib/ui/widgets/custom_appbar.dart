@@ -40,12 +40,6 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
             style: TextStyle(fontSize: 16),
           ),
         ),
-        IconButton(
-          padding: const EdgeInsets.all(2),
-          icon: Image.asset("assets/profile.png"),
-          onPressed: () => Navigator.pushNamed(context, '/profile'),
-          tooltip: "Ir al perfil",
-        ),
       ],
     );
   }

@@ -1,6 +1,10 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
-import 'package:hlinog/ui/widgets/appbar.dart';
-import 'package:hlinog/ui/widgets/lesson_card.dart';
+import 'package:hlingo/models/lesson.dart';
+import 'package:hlingo/providers/lessons_provider.dart';
+import 'package:hlingo/ui/widgets/custom_appbar.dart';
+import 'package:hlingo/ui/widgets/lesson_card.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key? key}) : super(key: key);
@@ -10,9 +14,10 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  LessonsProvider lessonsProvider= LessonsProvider();
+  List<Lesson> _lessonList=List<Lesson>.empty();
   String _searchTerm = '';
   String? _error;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,6 +55,14 @@ class _SearchPageState extends State<SearchPage> {
                       });
                       if (_error != null) return;
                       // TODO: Realizar búsqueda
+                      lessonsProvider
+                          .findLessons(_searchTerm)
+                      .then((lessons) =>
+                      setState((){
+                        _lessonList=lessons;
+                      }
+                      )
+                      );
                     },
                     child: const Text("Buscar"),
                     style: ButtonStyle(
@@ -61,7 +74,10 @@ class _SearchPageState extends State<SearchPage> {
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [LessonCard(), LessonCard(), LessonCard()],
+              children: _lessonList.
+              asMap()
+                    .entries
+                .map((lesson) => LessonCard(title: lesson.value.title) ).toList()
             ),
           ],
         ));

@@ -42,7 +42,6 @@ android {
     }
 
     defaultConfig {
-
         applicationId "com.example.hlinog"
         minSdkVersion 21
         targetSdkVersion 21
