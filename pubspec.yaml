@@ -42,6 +42,8 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   http: ^0.13.4
   auto_route: ^4.2.1
+  equatable: ^2.0.0
+  optional: 6.1.0+1
 
 dev_dependencies:
   auto_route_generator:

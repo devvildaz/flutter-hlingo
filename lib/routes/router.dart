@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:hlingo/routes/auth_guard.dart';
+import 'package:hlingo/ui/pages/camera_page.dart';
 import 'package:hlingo/ui/pages/home_page.dart';
 import 'package:hlingo/ui/pages/landing_page.dart';
 import 'package:hlingo/ui/pages/lesson_screen.dart';
+import 'package:hlingo/ui/pages/lesson_wrapper.dart';
 import 'package:hlingo/ui/pages/login_page.dart';
 import 'package:hlingo/ui/pages/profile_page.dart';
 import 'package:hlingo/ui/pages/profile_page_edit.dart';
@@ -36,7 +38,16 @@ import 'package:hlingo/ui/pages/search_page.dart';
             path: "profile/edit",
             name: "ProfileEditRoute",
             page: ProfilePageEdit),
-        AutoRoute(path: "lesson/:id", name: "LessonRoute", page: LessonScreen),
+        AutoRoute(
+            path: "lesson/:id",
+            name: "LessonWrapperRoute",
+            page: LessonWrapperPage,
+            children: [
+              AutoRoute(path: "", name: "LessonRoute", page: LessonPage),
+              AutoRoute(path: "camera", name: "LessonCameraRoute", page: CameraPage),
+            ]
+        ),
+
       ],
       guards: [AuthGuard],
     )

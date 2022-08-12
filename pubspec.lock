@@ -232,6 +232,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.3"
+  equatable:
+    dependency: "direct main"
+    description:
+      name: equatable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.3"
   fake_async:
     dependency: transitive
     description:
@@ -485,6 +492,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  optional:
+    dependency: "direct main"
+    description:
+      name: optional
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "6.1.0+1"
   package_config:
     dependency: transitive
     description:

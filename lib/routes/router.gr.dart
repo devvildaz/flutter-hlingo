@@ -12,25 +12,28 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i1;
-import 'package:flutter/material.dart' as _i10;
+import 'package:camera/camera.dart' as _i14;
+import 'package:flutter/material.dart' as _i12;
 
+import '../ui/pages/camera_page.dart' as _i11;
 import '../ui/pages/home_page.dart' as _i5;
 import '../ui/pages/landing_page.dart' as _i2;
-import '../ui/pages/lesson_screen.dart' as _i9;
+import '../ui/pages/lesson_screen.dart' as _i10;
+import '../ui/pages/lesson_wrapper.dart' as _i9;
 import '../ui/pages/login_page.dart' as _i3;
 import '../ui/pages/profile_page.dart' as _i7;
 import '../ui/pages/profile_page_edit.dart' as _i8;
 import '../ui/pages/register_page.dart' as _i4;
 import '../ui/pages/search_page.dart' as _i6;
-import 'auth_guard.dart' as _i11;
+import 'auth_guard.dart' as _i13;
 
 class AppRouter extends _i1.RootStackRouter {
   AppRouter(
-      {_i10.GlobalKey<_i10.NavigatorState>? navigatorKey,
+      {_i12.GlobalKey<_i12.NavigatorState>? navigatorKey,
       required this.authGuard})
       : super(navigatorKey);
 
-  final _i11.AuthGuard authGuard;
+  final _i13.AuthGuard authGuard;
 
   @override
   final Map<String, _i1.PageFactory> pagesMap = {
@@ -59,10 +62,8 @@ class AppRouter extends _i1.RootStackRouter {
           routeData: routeData, child: const _i5.HomePage());
     },
     SearchRoute.name: (routeData) {
-      final args = routeData.argsAs<SearchRouteArgs>(
-          orElse: () => const SearchRouteArgs());
       return _i1.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i6.SearchPage(key: args.key));
+          routeData: routeData, child: const _i6.SearchPage());
     },
     ProfileRoute.name: (routeData) {
       return _i1.MaterialPageX<dynamic>(
@@ -72,13 +73,26 @@ class AppRouter extends _i1.RootStackRouter {
       return _i1.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i8.ProfilePageEdit());
     },
-    LessonRoute.name: (routeData) {
-      final args = routeData.argsAs<LessonRouteArgs>(
-          orElse: () => LessonRouteArgs();
+    LessonWrapperRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<LessonWrapperRouteArgs>(
+          orElse: () => LessonWrapperRouteArgs(id: pathParams.getString('id')));
       return _i1.MaterialPageX<dynamic>(
           routeData: routeData,
-          child:
-              _i9.LessonScreen(key: args.key, lessonTitle: args.lessonTitle));
+          child: _i9.LessonWrapperPage(key: args.key, id: args.id));
+    },
+    LessonRoute.name: (routeData) {
+      final args = routeData.argsAs<LessonRouteArgs>();
+      return _i1.MaterialPageX<dynamic>(
+          routeData: routeData,
+          child: _i10.LessonPage(key: args.key, id: args.id));
+    },
+    LessonCameraRoute.name: (routeData) {
+      final args = routeData.argsAs<LessonCameraRouteArgs>();
+      return _i1.MaterialPageX<dynamic>(
+          routeData: routeData,
+          child: _i11.CameraPage(
+              key: args.key, cameraController: args.cameraController));
     }
   };
 
@@ -108,8 +122,15 @@ class AppRouter extends _i1.RootStackRouter {
               path: 'profile', parent: PrivateRoutes.name),
           _i1.RouteConfig(ProfileEditRoute.name,
               path: 'profile/edit', parent: PrivateRoutes.name),
-          _i1.RouteConfig(LessonRoute.name,
-              path: 'lesson/:id', parent: PrivateRoutes.name)
+          _i1.RouteConfig(LessonWrapperRoute.name,
+              path: 'lesson/:id',
+              parent: PrivateRoutes.name,
+              children: [
+                _i1.RouteConfig(LessonRoute.name,
+                    path: '', parent: LessonWrapperRoute.name),
+                _i1.RouteConfig(LessonCameraRoute.name,
+                    path: 'camera', parent: LessonWrapperRoute.name)
+              ])
         ])
       ];
 }
@@ -166,23 +187,10 @@ class HomeRoute extends _i1.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i6.SearchPage]
-class SearchRoute extends _i1.PageRouteInfo<SearchRouteArgs> {
-  SearchRoute({_i10.Key? key})
-      : super(SearchRoute.name,
-            path: 'search', args: SearchRouteArgs(key: key));
+class SearchRoute extends _i1.PageRouteInfo<void> {
+  const SearchRoute() : super(SearchRoute.name, path: 'search');
 
   static const String name = 'SearchRoute';
-}
-
-class SearchRouteArgs {
-  const SearchRouteArgs({this.key});
-
-  final _i10.Key? key;
-
-  @override
-  String toString() {
-    return 'SearchRouteArgs{key: $key}';
-  }
 }
 
 /// generated route for
@@ -202,25 +210,77 @@ class ProfileEditRoute extends _i1.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i9.LessonScreen]
-class LessonRoute extends _i1.PageRouteInfo<LessonRouteArgs> {
-  LessonRoute({_i10.Key? key, required String lessonTitle})
-      : super(LessonRoute.name,
+/// [_i9.LessonWrapperPage]
+class LessonWrapperRoute extends _i1.PageRouteInfo<LessonWrapperRouteArgs> {
+  LessonWrapperRoute(
+      {_i12.Key? key, required String id, List<_i1.PageRouteInfo>? children})
+      : super(LessonWrapperRoute.name,
             path: 'lesson/:id',
-            args: LessonRouteArgs(key: key, lessonTitle: lessonTitle));
+            args: LessonWrapperRouteArgs(key: key, id: id),
+            rawPathParams: {'id': id},
+            initialChildren: children);
+
+  static const String name = 'LessonWrapperRoute';
+}
+
+class LessonWrapperRouteArgs {
+  const LessonWrapperRouteArgs({this.key, required this.id});
+
+  final _i12.Key? key;
+
+  final String id;
+
+  @override
+  String toString() {
+    return 'LessonWrapperRouteArgs{key: $key, id: $id}';
+  }
+}
+
+/// generated route for
+/// [_i10.LessonPage]
+class LessonRoute extends _i1.PageRouteInfo<LessonRouteArgs> {
+  LessonRoute({_i12.Key? key, required String id})
+      : super(LessonRoute.name,
+            path: '', args: LessonRouteArgs(key: key, id: id));
 
   static const String name = 'LessonRoute';
 }
 
 class LessonRouteArgs {
-  const LessonRouteArgs({this.key, required this.lessonTitle });
+  const LessonRouteArgs({this.key, required this.id});
 
-  final _i10.Key? key;
+  final _i12.Key? key;
 
-  final String lessonTitle;
+  final String id;
 
   @override
   String toString() {
-    return 'LessonRouteArgs{key: $key, lessonTitle: $lessonTitle}';
+    return 'LessonRouteArgs{key: $key, id: $id}';
+  }
+}
+
+/// generated route for
+/// [_i11.CameraPage]
+class LessonCameraRoute extends _i1.PageRouteInfo<LessonCameraRouteArgs> {
+  LessonCameraRoute(
+      {_i12.Key? key, required _i14.CameraController cameraController})
+      : super(LessonCameraRoute.name,
+            path: 'camera',
+            args: LessonCameraRouteArgs(
+                key: key, cameraController: cameraController));
+
+  static const String name = 'LessonCameraRoute';
+}
+
+class LessonCameraRouteArgs {
+  const LessonCameraRouteArgs({this.key, required this.cameraController});
+
+  final _i12.Key? key;
+
+  final _i14.CameraController cameraController;
+
+  @override
+  String toString() {
+    return 'LessonCameraRouteArgs{key: $key, cameraController: $cameraController}';
   }
 }
