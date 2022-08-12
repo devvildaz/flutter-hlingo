@@ -1,11 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:camera/camera.dart';
 import "package:flutter/material.dart";
-import 'package:hlinog/ui/pages/camera_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import "../widgets/lesson_icon.dart";
 
 class LessonScreen extends StatefulWidget {
-  const LessonScreen({Key? key, this.lessonTitle="Buenos dias"}) : super(key: key);
+  const LessonScreen({Key? key, @PathParam('id') required this.lessonTitle}) : super(key: key);
 
   final String lessonTitle;
 
@@ -21,16 +21,15 @@ class _LessonScreenState extends State<LessonScreen> {
 
   @override
   Widget build(BuildContext context) {
-      
     var height = MediaQuery.of(context).viewPadding.top;
-
+    debugPrint( "buildContext "+ widget.lessonTitle);
     return Container(
       margin: EdgeInsets.only(top: height),
       padding: const EdgeInsets.only(top: 100),
       color: Colors.white,
       child: Column(
         children: [
-          const LessonIconWidget(),
+          LessonIconWidget(title: widget.lessonTitle),
           Expanded(
             child: SizedBox(
               child: GridView.count(
@@ -40,15 +39,7 @@ class _LessonScreenState extends State<LessonScreen> {
                 childAspectRatio: 9.33 ,
                 mainAxisSpacing: 10,
                 children: [
-                  ElevatedButton(onPressed: () async {
-                    await availableCameras().then((value) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => CameraScreen(cameras: value))
-                      );
-                    });
-                  }, child: const Text('Practicar')),
-                  ElevatedButton(onPressed: null, child: const Text('Ver video de practica'))
+                  Container()
                 ]          
               ),
             ),

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class LessonCard extends StatelessWidget {
@@ -15,7 +16,8 @@ class LessonCard extends StatelessWidget {
           splashColor: Colors.indigo[100],
           highlightColor: Colors.indigo.withAlpha(50),
           onTap: () {
-            debugPrint('Card tapped.');
+            debugPrint('go to lesson ' + title );
+            AutoRouter.of(context).pushNamed("/lesson/");
           },
           child: Container(
             width: 120,

@@ -74,7 +74,7 @@ class AppRouter extends _i1.RootStackRouter {
     },
     LessonRoute.name: (routeData) {
       final args = routeData.argsAs<LessonRouteArgs>(
-          orElse: () => const LessonRouteArgs());
+          orElse: () => LessonRouteArgs();
       return _i1.MaterialPageX<dynamic>(
           routeData: routeData,
           child:
@@ -204,7 +204,7 @@ class ProfileEditRoute extends _i1.PageRouteInfo<void> {
 /// generated route for
 /// [_i9.LessonScreen]
 class LessonRoute extends _i1.PageRouteInfo<LessonRouteArgs> {
-  LessonRoute({_i10.Key? key, String lessonTitle = "Buenos dias"})
+  LessonRoute({_i10.Key? key, required String lessonTitle})
       : super(LessonRoute.name,
             path: 'lesson/:id',
             args: LessonRouteArgs(key: key, lessonTitle: lessonTitle));
@@ -213,7 +213,7 @@ class LessonRoute extends _i1.PageRouteInfo<LessonRouteArgs> {
 }
 
 class LessonRouteArgs {
-  const LessonRouteArgs({this.key, this.lessonTitle = "Buenos dias"});
+  const LessonRouteArgs({this.key, required this.lessonTitle });
 
   final _i10.Key? key;
 

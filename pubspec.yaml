@@ -28,7 +28,6 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   bloc: ^8.0.3
-  cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.0
@@ -39,7 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   image_picker: ^0.8.5+3
   video_player: ^2.4.2
-  camera: ^0.9.7+1
+  camera: ^0.9.7
   flutter_secure_storage: ^5.0.2
   http: ^0.13.4
   auto_route: ^4.2.1

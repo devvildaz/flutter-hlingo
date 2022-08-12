@@ -2,7 +2,9 @@ import "package:flutter/material.dart";
 
 
 class LessonIconWidget extends StatelessWidget {
-  const LessonIconWidget({ Key? key }) : super(key: key);
+
+  const LessonIconWidget({ Key? key, required this.title }) : super(key: key);
+  final String? title;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -15,7 +17,7 @@ class LessonIconWidget extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text("{ Lesson Title }", style: Theme.of(context).textTheme.headline4)
+            child: Text(title ?? 'Unknown', style: Theme.of(context).textTheme.headline4)
           ),
       ])
     );
