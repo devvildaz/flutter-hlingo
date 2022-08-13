@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hlingo/bloc/user/user_bloc.dart';
-import 'package:hlingo/providers/user_provider.dart';
 import 'package:hlingo/ui/widgets/custom_appbar.dart';
-import 'package:hlingo/models/user.dart';
 
 class ProfilePageEdit extends StatefulWidget {
   const ProfilePageEdit({Key? key}) : super(key: key);
@@ -18,8 +16,6 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9\-\_]+(\.[a-zA-Z]+)*$");
   final _formKey = GlobalKey<FormState>();
 
-  UserProvider userProvider= UserProvider();
-  List<User> _userList = List<User>.empty();
   String _userName = '';
   String _userEmail = '';
 
@@ -34,12 +30,11 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar(),
+      appBar: const CustomAppbar(),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          child:
-          Column(
+          child: Column(
             children: [
               Row(
                 children: [
@@ -56,13 +51,11 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                 return Row(
                   children: [
                     Expanded(
-                      child:
-                      Text(
-                        state.user!.name,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 24),
-                      )
-                    ),
+                        child: Text(
+                      state.user!.name,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 24),
+                    )),
                   ],
                 );
               }),
@@ -70,12 +63,11 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                 return Row(
                   children: [
                     Expanded(
-                      child: Text(
-                        state.user!.email,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 12, color: Colors.grey),
-                      )
-                    ),
+                        child: Text(
+                      state.user!.email,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    )),
                   ],
                 );
               }),
@@ -104,7 +96,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                     height: 40,
                     alignment: Alignment.center,
                     child:
-                    BlocBuilder<UserBloc, UserState>(builder: (_, state) {
+                        BlocBuilder<UserBloc, UserState>(builder: (_, state) {
                       return TextFormField(
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -125,7 +117,8 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                           }
                         },
                         textAlign: TextAlign.left,
-                        style: const TextStyle(fontSize: 15, color: Colors.black),
+                        style:
+                            const TextStyle(fontSize: 15, color: Colors.black),
                       );
                     }),
                   ),
@@ -157,31 +150,32 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                     height: 40,
                     alignment: Alignment.center,
                     child:
-                      BlocBuilder<UserBloc, UserState>(builder: (_, state) {
-                        return TextFormField(
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.only(
-                              left: 10,
-                              bottom: 20,
-                            ),
-                            hintText: state.user!.email,
+                        BlocBuilder<UserBloc, UserState>(builder: (_, state) {
+                      return TextFormField(
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.only(
+                            left: 10,
+                            bottom: 20,
                           ),
-                          validator: (value) {
-                            var correo = value.toString();
-                            if (_esEmail(correo)) {
-                              return "Ingrese un correo";
-                            } else if (value != null) {
-                              _userEmail = value;
-                            } else {
-                              _userEmail = state.user!.email;
-                            }
-                          },
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(fontSize: 15, color: Colors.black),
-                        );
-                      }),
-                    ),
+                          hintText: state.user!.email,
+                        ),
+                        validator: (value) {
+                          var correo = value.toString();
+                          if (_esEmail(correo)) {
+                            return "Ingrese un correo";
+                          } else if (value != null) {
+                            _userEmail = value;
+                          } else {
+                            _userEmail = state.user!.email;
+                          }
+                        },
+                        textAlign: TextAlign.left,
+                        style:
+                            const TextStyle(fontSize: 15, color: Colors.black),
+                      );
+                    }),
+                  ),
                 ],
               ),
               const SizedBox(
@@ -195,19 +189,17 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                     width: 350,
                     height: 45,
                     child:
-                      BlocBuilder<UserBloc, UserState>(builder: (_, state) {
-                        return ElevatedButton(
+                        BlocBuilder<UserBloc, UserState>(builder: (_, state) {
+                      return ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text("Guardando cambios ..."))
-                              );
-                              userProvider
-                                .updateUser(state., _userName, _userEmail)
-                                .then((user) => {
-                                  setState(() { _userList = user; })
-                                }
-                              );
+                                  const SnackBar(
+                                      content: Text("Guardando cambios ...")));
+                              BlocProvider.of<UserBloc>(context).add(UpdateUser(
+                                  id: state.user!.id!,
+                                  email: _userEmail,
+                                  name: _userName));
                             }
                           },
                           child: (const Text(
@@ -216,10 +208,8 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                           )),
                           style: ElevatedButton.styleFrom(
                             primary: const Color(0xff3949ab),
-                          )
-                        );
-                      }
-                    ),
+                          ));
+                    }),
                   )
                 ],
               )

@@ -26,3 +26,11 @@ class LogoutUser extends UserEvent {
 }
 
 class InitUser extends UserEvent {}
+
+class UpdateUser extends UserEvent {
+  final String id;
+  final String name;
+  final String email;
+
+  UpdateUser({required this.id, required this.name, required this.email});
+}

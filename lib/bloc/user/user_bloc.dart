@@ -65,19 +65,47 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     });
 
     on<InitUser>(((event, emit) async {
-      print("init");
+      print("init user");
       final userData = await UserStorage.getUserData();
       if (userData != null) {
-        print("cargando datos");
         emit(UserSetState(User(
           id: userData.id,
-          name: userData.email,
-          email: userData.name,
+          name: userData.name,
+          email: userData.email,
         )));
       } else {
         emit(const UserInitialState());
       }
     }));
+
+    on<UpdateUser>((event, emit) async {
+      try {
+        final response = await http.post(
+          Uri.parse('$baseUrl/user/edit'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode(<String, String>{
+            'id': event.id,
+            'name': event.name,
+            'email': event.email,
+          }),
+        );
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          print("Updated");
+          final user = User.fromJson(json.decode(response.body));
+
+          await UserStorage.setUserData(
+              id: user.id!, name: user.name, email: user.email);
+          emit(UserSetState(user));
+        } else {
+          emit(const ErrorState('Error al actualizar'));
+        }
+      } catch (e) {
+        emit(const ErrorState("Error al actualizar"));
+      }
+    });
 
     on<LogoutUser>((event, emit) async {
       await UserStorage.deleteUserData();

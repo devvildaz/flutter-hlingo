@@ -104,14 +104,8 @@ class _LoginPage extends State<LoginPage> {
                       child: BlocListener<UserBloc, UserState>(
                           listener: (context, state) {
                             if (state.userState == AuthState.authenticated) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text('Bienvenido'),
-                                backgroundColor: Colors.green,
-                              ));
                               AutoRouter.of(context).pushNamed("/home");
-                            }
-                            if (state.userState == AuthState.error) {
+                            } else if (state.userState == AuthState.error) {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(
                                 content: Text('Error al acceder al sistema'),

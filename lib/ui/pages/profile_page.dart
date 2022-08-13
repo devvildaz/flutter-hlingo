@@ -25,20 +25,24 @@ class ProfilePage extends StatelessWidget {
             ],
           ),
           BlocBuilder<UserBloc, UserState>(builder: (_, state) {
-            return Column(
-              children: [
-                Text(
-                  state.user!.name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 24),
-                ),
-                Text(
-                  state.user!.email,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
-                )
-              ],
-            );
+            if (state.user != null) {
+              return Column(
+                children: [
+                  Text(
+                    state.user!.name,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 24),
+                  ),
+                  Text(
+                    state.user!.email,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  )
+                ],
+              );
+            } else {
+              return Container();
+            }
           }),
           const SizedBox(height: 50),
           Row(children: const [
@@ -101,7 +105,7 @@ class ProfilePage extends StatelessWidget {
             const SizedBox(width: 20),
             SizedBox(
                 width: 350,
-                height: 20,
+                height: 36,
                 child: ElevatedButton(
                     style: ButtonStyle(
                         backgroundColor:
