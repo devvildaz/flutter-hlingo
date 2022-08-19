@@ -12,8 +12,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i1;
-import 'package:camera/camera.dart' as _i14;
-import 'package:flutter/material.dart' as _i12;
+import 'package:camera/camera.dart' as _i16;
+import 'package:flutter/material.dart' as _i14;
 
 import '../ui/pages/camera_page.dart' as _i11;
 import '../ui/pages/home_page.dart' as _i5;
@@ -24,16 +24,18 @@ import '../ui/pages/login_page.dart' as _i3;
 import '../ui/pages/profile_page.dart' as _i7;
 import '../ui/pages/profile_page_edit.dart' as _i8;
 import '../ui/pages/register_page.dart' as _i4;
+import '../ui/pages/review_screen.dart' as _i13;
 import '../ui/pages/search_page.dart' as _i6;
-import 'auth_guard.dart' as _i13;
+import '../ui/pages/video_preview.dart' as _i12;
+import 'auth_guard.dart' as _i15;
 
 class AppRouter extends _i1.RootStackRouter {
   AppRouter(
-      {_i12.GlobalKey<_i12.NavigatorState>? navigatorKey,
+      {_i14.GlobalKey<_i14.NavigatorState>? navigatorKey,
       required this.authGuard})
       : super(navigatorKey);
 
-  final _i13.AuthGuard authGuard;
+  final _i15.AuthGuard authGuard;
 
   @override
   final Map<String, _i1.PageFactory> pagesMap = {
@@ -74,9 +76,7 @@ class AppRouter extends _i1.RootStackRouter {
           routeData: routeData, child: const _i8.ProfilePageEdit());
     },
     LessonWrapperRoute.name: (routeData) {
-      final pathParams = routeData.inheritedPathParams;
-      final args = routeData.argsAs<LessonWrapperRouteArgs>(
-          orElse: () => LessonWrapperRouteArgs(id: pathParams.getString('id')));
+      final args = routeData.argsAs<LessonWrapperRouteArgs>();
       return _i1.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i9.LessonWrapperPage(key: args.key, id: args.id));
@@ -92,7 +92,30 @@ class AppRouter extends _i1.RootStackRouter {
       return _i1.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i11.CameraPage(
-              key: args.key, cameraController: args.cameraController));
+              key: args.key,
+              cameraController: args.cameraController,
+              onDispose: args.onDispose,
+              onTerminate: args.onTerminate));
+    },
+    VideoPreviewRoute.name: (routeData) {
+      final args = routeData.argsAs<VideoPreviewRouteArgs>();
+      return _i1.MaterialPageX<dynamic>(
+          routeData: routeData,
+          child: _i12.VideoPreview(
+              key: args.key,
+              urlVideo: args.urlVideo,
+              onNext: args.onNext,
+              onPrev: args.onPrev));
+    },
+    ReviewScreenRoute.name: (routeData) {
+      final args = routeData.argsAs<ReviewScreenRouteArgs>(
+          orElse: () => const ReviewScreenRouteArgs());
+      return _i1.MaterialPageX<dynamic>(
+          routeData: routeData,
+          child: _i13.ReviewScreen(
+              key: args.key,
+              againOption: args.againOption,
+              returnOption: args.returnOption));
     }
   };
 
@@ -123,13 +146,17 @@ class AppRouter extends _i1.RootStackRouter {
           _i1.RouteConfig(ProfileEditRoute.name,
               path: 'profile/edit', parent: PrivateRoutes.name),
           _i1.RouteConfig(LessonWrapperRoute.name,
-              path: 'lesson/:id',
+              path: 'lesson',
               parent: PrivateRoutes.name,
               children: [
                 _i1.RouteConfig(LessonRoute.name,
                     path: '', parent: LessonWrapperRoute.name),
                 _i1.RouteConfig(LessonCameraRoute.name,
-                    path: 'camera', parent: LessonWrapperRoute.name)
+                    path: 'camera', parent: LessonWrapperRoute.name),
+                _i1.RouteConfig(VideoPreviewRoute.name,
+                    path: 'preview', parent: LessonWrapperRoute.name),
+                _i1.RouteConfig(ReviewScreenRoute.name,
+                    path: 'review', parent: LessonWrapperRoute.name)
               ])
         ])
       ];
@@ -213,11 +240,10 @@ class ProfileEditRoute extends _i1.PageRouteInfo<void> {
 /// [_i9.LessonWrapperPage]
 class LessonWrapperRoute extends _i1.PageRouteInfo<LessonWrapperRouteArgs> {
   LessonWrapperRoute(
-      {_i12.Key? key, required String id, List<_i1.PageRouteInfo>? children})
+      {_i14.Key? key, required String id, List<_i1.PageRouteInfo>? children})
       : super(LessonWrapperRoute.name,
-            path: 'lesson/:id',
+            path: 'lesson',
             args: LessonWrapperRouteArgs(key: key, id: id),
-            rawPathParams: {'id': id},
             initialChildren: children);
 
   static const String name = 'LessonWrapperRoute';
@@ -226,7 +252,7 @@ class LessonWrapperRoute extends _i1.PageRouteInfo<LessonWrapperRouteArgs> {
 class LessonWrapperRouteArgs {
   const LessonWrapperRouteArgs({this.key, required this.id});
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   final String id;
 
@@ -239,7 +265,7 @@ class LessonWrapperRouteArgs {
 /// generated route for
 /// [_i10.LessonPage]
 class LessonRoute extends _i1.PageRouteInfo<LessonRouteArgs> {
-  LessonRoute({_i12.Key? key, required String id})
+  LessonRoute({_i14.Key? key, required String id})
       : super(LessonRoute.name,
             path: '', args: LessonRouteArgs(key: key, id: id));
 
@@ -249,7 +275,7 @@ class LessonRoute extends _i1.PageRouteInfo<LessonRouteArgs> {
 class LessonRouteArgs {
   const LessonRouteArgs({this.key, required this.id});
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   final String id;
 
@@ -263,24 +289,104 @@ class LessonRouteArgs {
 /// [_i11.CameraPage]
 class LessonCameraRoute extends _i1.PageRouteInfo<LessonCameraRouteArgs> {
   LessonCameraRoute(
-      {_i12.Key? key, required _i14.CameraController cameraController})
+      {_i14.Key? key,
+      required _i16.CameraController cameraController,
+      void Function()? onDispose,
+      dynamic Function(String)? onTerminate})
       : super(LessonCameraRoute.name,
             path: 'camera',
             args: LessonCameraRouteArgs(
-                key: key, cameraController: cameraController));
+                key: key,
+                cameraController: cameraController,
+                onDispose: onDispose,
+                onTerminate: onTerminate));
 
   static const String name = 'LessonCameraRoute';
 }
 
 class LessonCameraRouteArgs {
-  const LessonCameraRouteArgs({this.key, required this.cameraController});
+  const LessonCameraRouteArgs(
+      {this.key,
+      required this.cameraController,
+      this.onDispose,
+      this.onTerminate});
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
-  final _i14.CameraController cameraController;
+  final _i16.CameraController cameraController;
+
+  final void Function()? onDispose;
+
+  final dynamic Function(String)? onTerminate;
 
   @override
   String toString() {
-    return 'LessonCameraRouteArgs{key: $key, cameraController: $cameraController}';
+    return 'LessonCameraRouteArgs{key: $key, cameraController: $cameraController, onDispose: $onDispose, onTerminate: $onTerminate}';
+  }
+}
+
+/// generated route for
+/// [_i12.VideoPreview]
+class VideoPreviewRoute extends _i1.PageRouteInfo<VideoPreviewRouteArgs> {
+  VideoPreviewRoute(
+      {_i14.Key? key,
+      required String urlVideo,
+      void Function()? onNext,
+      void Function()? onPrev})
+      : super(VideoPreviewRoute.name,
+            path: 'preview',
+            args: VideoPreviewRouteArgs(
+                key: key, urlVideo: urlVideo, onNext: onNext, onPrev: onPrev));
+
+  static const String name = 'VideoPreviewRoute';
+}
+
+class VideoPreviewRouteArgs {
+  const VideoPreviewRouteArgs(
+      {this.key, required this.urlVideo, this.onNext, this.onPrev});
+
+  final _i14.Key? key;
+
+  final String urlVideo;
+
+  final void Function()? onNext;
+
+  final void Function()? onPrev;
+
+  @override
+  String toString() {
+    return 'VideoPreviewRouteArgs{key: $key, urlVideo: $urlVideo, onNext: $onNext, onPrev: $onPrev}';
+  }
+}
+
+/// generated route for
+/// [_i13.ReviewScreen]
+class ReviewScreenRoute extends _i1.PageRouteInfo<ReviewScreenRouteArgs> {
+  ReviewScreenRoute(
+      {_i14.Key? key,
+      void Function()? againOption,
+      void Function()? returnOption})
+      : super(ReviewScreenRoute.name,
+            path: 'review',
+            args: ReviewScreenRouteArgs(
+                key: key,
+                againOption: againOption,
+                returnOption: returnOption));
+
+  static const String name = 'ReviewScreenRoute';
+}
+
+class ReviewScreenRouteArgs {
+  const ReviewScreenRouteArgs({this.key, this.againOption, this.returnOption});
+
+  final _i14.Key? key;
+
+  final void Function()? againOption;
+
+  final void Function()? returnOption;
+
+  @override
+  String toString() {
+    return 'ReviewScreenRouteArgs{key: $key, againOption: $againOption, returnOption: $returnOption}';
   }
 }

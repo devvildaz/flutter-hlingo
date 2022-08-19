@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import "package:flutter/material.dart";
 import "package:hlingo/bloc/camera/camera_bloc.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
+import 'package:optional/optional.dart';
 import "../widgets/lesson_icon.dart";
 
 class LessonPage extends StatefulWidget {
@@ -17,10 +18,12 @@ class LessonPage extends StatefulWidget {
 }
 
 final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
-  minimumSize: Size(88,36)
+  minimumSize: const Size(88,36)
 );
 
 class _LessonScreenState extends State<LessonPage> {
+
+  bool isLoadingCamera = false;
 
   @override
   void initState() {
@@ -36,7 +39,17 @@ class _LessonScreenState extends State<LessonPage> {
       child: Column(
         children: [
           LessonIconWidget(title: widget.id),
-          BlocBuilder<CameraBloc,CameraState>(
+          BlocConsumer<CameraBloc,CameraState>(
+            listener: (context, state) {
+              print("consumer a state changed event");
+              //context.read<CameraBloc>().add(RemoveCameraEvent(state.cameras, state.controller.value));]
+              if(state.controller.isEmpty) {
+                print("consumer a state changed event - ControllerIsEmpty");
+                setState(() {
+                  isLoadingCamera = false;
+                });
+              }
+            },
             builder: (context, state) {
               return  Expanded(
                 child: SizedBox(
@@ -48,9 +61,9 @@ class _LessonScreenState extends State<LessonPage> {
                       mainAxisSpacing: 10,
                       children: [
                         ElevatedButton(
-                            onPressed: () {
+                            onPressed: false ? () {
 
-                            },
+                            } : null,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -67,14 +80,23 @@ class _LessonScreenState extends State<LessonPage> {
                             )
                         ),
                         ElevatedButton(
-                            onPressed:  () {
+
+                            onPressed: !isLoadingCamera ?  () {
                               debugPrint('La longitud de: ' + state.cameras.length.toString());
-                              if(state.controller.isEmpty) debugPrint("no iniciado");
-                              else debugPrint("iniciado");
-                            },
+                              if(state.controller.isEmpty) {
+                                debugPrint("no iniciado");
+                                context.read<CameraBloc>().add(InitCameraEvent(state.cameras, 0));
+                                setState(() {
+                                  isLoadingCamera = true;
+                                });
+                              }
+                              else {
+                                debugPrint("iniciado");
+                              }
+                            } : null ,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
+                              children: !isLoadingCamera ?  [
                                 Container(
                                     margin: const EdgeInsets.only(right: 8),
                                     child: const Icon(
@@ -82,8 +104,14 @@ class _LessonScreenState extends State<LessonPage> {
                                       color: Colors.white,
                                       size: 32,
                                     )
-                                ),
+                                ) ,
                                 const Text("Grabar y practicar"),
+                              ] : [
+                                const SizedBox(
+                                  child: CircularProgressIndicator(strokeWidth: 2,),
+                                  width: 16.0,
+                                  height: 16.0,
+                                )
                               ],
                             )
                         )
@@ -101,6 +129,18 @@ class _LessonScreenState extends State<LessonPage> {
   @override
   Widget build(BuildContext context) {
     return buildMainPage(context);
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
   }
 }
 

@@ -1,43 +1,77 @@
 import 'dart:async';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:hlingo/ui/pages/lesson_wrapper.dart';
 
 class RecordingButton extends StatefulWidget {
   final Function terminatedRecording;
   final Function startedRecording;
+  final double duration;
+  final double waitTime;
   const RecordingButton({
     Key? key,
     required this.startedRecording,
-    required this.terminatedRecording
+    required this.terminatedRecording,
+    this.duration = 2000,
+    this.waitTime = 3000,
   }) : super(key: key);
 
   @override
   State<RecordingButton> createState() => _RecordingButtonState();
 }
 
+enum RecordingState {
+  IDLE,
+  WAIT,
+  RECORDING,
+}
+
 class _RecordingButtonState extends State<RecordingButton> {
   Timer? _timer;
-  bool _recording = false;
-  final double _duration = 2000;
+  Timer? _waitTimer;
+  RecordingState currentState = RecordingState.IDLE;
   double _start = 2000;
+  double _waittimer = 3000;
   ValueNotifier<double> progress = ValueNotifier<double>(1);
 
+  void startWaitTimer() {
+    const hundredMs = Duration(milliseconds: 100);
+    setState(() {
+      currentState = RecordingState.WAIT;
+    });
+    _waitTimer = Timer.periodic(
+        hundredMs,
+        (Timer timer) {
+          if(_waittimer <= 0) {
+            _waittimer = 3000;
+            _waitTimer?.cancel();
+            currentState = RecordingState.RECORDING;
+            widget.startedRecording();
+            startTimer();
+          } else {
+            setState(() {
+              _waittimer -= 100;
+            });
+          }
+        }
+    );
+  }
 
   void startTimer() {
-    const hundredMs = const Duration(milliseconds: 10);
+    const hundredMs = Duration(milliseconds: 10);
     _timer = Timer.periodic(hundredMs,
       (Timer timer) {
           if(_start < 0) {
             setState(() {
-              progress.value = 0;
-              timer.cancel();
+              resetTimer();
               widget.terminatedRecording();
             });
           } else {
             setState(() {
               _start -= 10;
-              progress.value = _start / _duration;
+              progress.value = _start / widget.duration;
             });
           }
       }
@@ -50,47 +84,70 @@ class _RecordingButtonState extends State<RecordingButton> {
     super.dispose();
   }
 
+  resetTimer() {
+    setState(() {
+      progress.value = 0;
+      _timer?.cancel();
+      _start = widget.duration;
+      currentState = RecordingState.IDLE;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return _recording ? SizedBox(
-        width: 80,
-        height: 80,
-        child: CustomPaint(
-          size: const Size(80,80),
-          painter: DashedRecorButton(progressValue: progress ),
-          child: GestureDetector(
-            onTap: () => {
+    switch(currentState) {
+      case RecordingState.IDLE:
+        return ElevatedButton(
+            onPressed: () {
               setState(() {
-                progress.value = 1;
-                _timer?.cancel();
-                _start = _duration;
-                _recording = false;
-              })
+                startWaitTimer();
+              });
             },
-            child: const Center(
-              child:  Icon(
-                  Icons.stop,
-                  size: 32,
-                  color: Colors.red
-              ),
+            style: ElevatedButton.styleFrom(
+                primary: Colors.redAccent,
+                fixedSize: const Size(80, 80),
+                shape: const CircleBorder()
             ),
-          )
-        ),
-    ) : ElevatedButton(
+            child: Container()
+        );
+      case RecordingState.WAIT:
+        return ElevatedButton(
+            onPressed: () {
+              setState(() {
 
-        onPressed: () {
-          setState(() {
-            _recording = true;
-            widget.startedRecording();
-            startTimer();
-         });
-        },
-        style: ElevatedButton.styleFrom(
-            fixedSize: const Size(80, 80),
-            shape: const CircleBorder()
-        ),
-        child: Container());
+              });
+            },
+            style: ElevatedButton.styleFrom(
+                primary: Colors.redAccent,
+                fixedSize: const Size(80, 80),
+                shape: const CircleBorder()
+            ),
+            child: Text((_waittimer / 1000).ceil().toString(), style: const TextStyle(fontSize: 32),)
+        );
+      case RecordingState.RECORDING:
+        return SizedBox(
+          width: 80,
+          height: 80,
+          child: CustomPaint(
+              size: const Size(80,80),
+              painter: DashedRecorButton(progressValue: progress ),
+              child: GestureDetector(
+                onTap: () {
+                  resetTimer();
+                  widget.terminatedRecording();
+                },
+                child: const Center(
+                  child:  Icon(
+                      Icons.stop,
+                      size: 32,
+                      color: Colors.red
+                  ),
+                ),
+              )
+          ),
+        );
+    }
+
   }
 }
 

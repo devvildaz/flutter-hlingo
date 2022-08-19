@@ -15,3 +15,15 @@ class InitCameraEvent extends CameraEvent {
   final List<CameraDescription> cameras;
   final int idxSelected;
 }
+
+
+class RemoveCameraEvent extends CameraEvent{
+  const RemoveCameraEvent(this.controller);
+  final CameraController controller;
+}
+
+
+class SendCameraEvent extends CameraEvent {
+  const SendCameraEvent(this.urlVideo);
+  final String urlVideo;
+}

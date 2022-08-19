@@ -9,7 +9,9 @@ import 'package:hlingo/ui/pages/login_page.dart';
 import 'package:hlingo/ui/pages/profile_page.dart';
 import 'package:hlingo/ui/pages/profile_page_edit.dart';
 import 'package:hlingo/ui/pages/register_page.dart';
+import 'package:hlingo/ui/pages/review_screen.dart';
 import 'package:hlingo/ui/pages/search_page.dart';
+import 'package:hlingo/ui/pages/video_preview.dart';
 
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
@@ -39,12 +41,14 @@ import 'package:hlingo/ui/pages/search_page.dart';
             name: "ProfileEditRoute",
             page: ProfilePageEdit),
         AutoRoute(
-            path: "lesson/:id",
+            path: "lesson",
             name: "LessonWrapperRoute",
             page: LessonWrapperPage,
             children: [
               AutoRoute(path: "", name: "LessonRoute", page: LessonPage),
               AutoRoute(path: "camera", name: "LessonCameraRoute", page: CameraPage),
+              AutoRoute(path: 'preview', name: "VideoPreviewRoute", page: VideoPreview),
+              AutoRoute(path: 'review', name: 'ReviewScreenRoute', page: ReviewScreen)
             ]
         ),
 

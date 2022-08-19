@@ -8,7 +8,7 @@ class CameraRepository {
   }
 
   static Future<CameraController> initializeCamera(List<CameraDescription> cameras, int idxTarget) async {
-    CameraController controller = CameraController(cameras[idxTarget], ResolutionPreset.medium);
+    CameraController controller = CameraController(cameras[idxTarget], ResolutionPreset.high);
     await controller.initialize();
     return controller;
   }

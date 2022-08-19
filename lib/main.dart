@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:hlingo/bloc/camera/camera_bloc.dart';
 import 'package:hlingo/ui/app.dart';
+import 'package:get_it/get_it.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -14,7 +16,14 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
+final serviceLocator = GetIt.instance;
+
+void setUp() {
+  serviceLocator.registerSingleton<CameraBloc>(CameraBloc());
+}
+
 void main() {
   HttpOverrides.global = MyHttpOverrides();
+  setUp();
   runApp(MyApp());
 }

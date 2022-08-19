@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hlingo/bloc/camera/camera_bloc.dart';
+import 'package:hlingo/routes/router.gr.dart';
 
 class LessonCard extends StatelessWidget {
   final String title;
@@ -22,8 +23,8 @@ class LessonCard extends StatelessWidget {
               highlightColor: Colors.indigo.withAlpha(50),
               onTap: () {
                 debugPrint('go to lesson ' + title );
-                context.read<CameraBloc>().add(LoadCamerasEvent());
-                AutoRouter.of(context).pushNamed("/lesson/" + title);
+                context.read<CameraBloc>().add(const LoadCamerasEvent());
+                AutoRouter.of(context).push(LessonWrapperRoute(id: title));
               },
               child: Container(
                 width: 120,

@@ -43,8 +43,8 @@ android {
 
     defaultConfig {
         applicationId "com.example.hlinog"
-        minSdkVersion 21
-        targetSdkVersion 21
+        minSdkVersion 24
+        targetSdkVersion 24
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

@@ -44,6 +44,8 @@ dependencies:
   auto_route: ^4.2.1
   equatable: ^2.0.0
   optional: 6.1.0+1
+  get_it: 7.2.0
+  ffmpeg_kit_flutter: 4.5.1
 
 dev_dependencies:
   auto_route_generator:

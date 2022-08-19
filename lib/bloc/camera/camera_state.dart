@@ -1,7 +1,7 @@
 part of "camera_bloc.dart";
 
 enum CamStatus {
-  initial, loading, success, failure
+  initial, loading, success, failure, evaluate
 }
 
 class CameraState
@@ -10,12 +10,14 @@ class CameraState
   final int cameraIdxSelected;
   final CamStatus status;
   final Optional<CameraController> controller;
+  final String urlVideo;
 
   const CameraState({
     this.cameras = const [],
     this.cameraIdxSelected =0,
     this.status = CamStatus.initial,
-    this.controller = const Optional.empty()
+    this.controller = const Optional.empty(),
+    this.urlVideo = ""
   });
 
 }
