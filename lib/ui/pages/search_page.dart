@@ -14,8 +14,8 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  LessonsProvider lessonsProvider= LessonsProvider();
-  List<Lesson> _lessonList=List<Lesson>.empty();
+  LessonsProvider lessonsProvider = LessonsProvider();
+  List<Lesson> _lessonList = List<Lesson>.empty();
   String _searchTerm = '';
   String? _error;
   @override
@@ -57,12 +57,9 @@ class _SearchPageState extends State<SearchPage> {
                       // TODO: Realizar búsqueda
                       lessonsProvider
                           .findLessons(_searchTerm)
-                      .then((lessons) =>
-                      setState((){
-                        _lessonList=lessons;
-                      }
-                      )
-                      );
+                          .then((lessons) => setState(() {
+                                _lessonList = lessons;
+                              }));
                     },
                     child: const Text("Buscar"),
                     style: ButtonStyle(
@@ -73,12 +70,13 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: _lessonList.
-              asMap()
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: _lessonList
+                    .asMap()
                     .entries
-                .map((lesson) => LessonCard(title: lesson.value.title) ).toList()
-            ),
+                    .map((lesson) => LessonCard(
+                        id: lesson.value.id.oid, title: lesson.value.title))
+                    .toList()),
           ],
         ));
   }

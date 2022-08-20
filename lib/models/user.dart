@@ -14,20 +14,20 @@ class User {
     required this.name,
     required this.email,
     this.password,
-    this.issuer,
+    this.score,
   });
 
   String? id;
   String name;
   String email;
   String? password = "";
-  String? issuer = "";
+  int? score = 0;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
         name: json["name"],
         email: json["email"],
-        issuer: json["issuer"],
+        score: json["score"],
       );
 
   Map<String, dynamic> toJson() => {

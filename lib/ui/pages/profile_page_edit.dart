@@ -199,7 +199,8 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                               BlocProvider.of<UserBloc>(context).add(UpdateUser(
                                   id: state.user!.id!,
                                   email: _userEmail,
-                                  name: _userName));
+                                  name: _userName,
+                                  score: state.user!.score!));
                             }
                           },
                           child: (const Text(

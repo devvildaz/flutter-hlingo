@@ -54,7 +54,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
               'password': event.password,
             }));
 
-        if (response.statusCode == 200 || response.statusCode == 201) {
+        if (response.statusCode == 201) {
           emit(const RegisteredState());
         } else {
           emit(const ErrorState('Error al registrar'));
@@ -65,14 +65,27 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     });
 
     on<InitUser>(((event, emit) async {
-      print("init user");
       final userData = await UserStorage.getUserData();
+
       if (userData != null) {
-        emit(UserSetState(User(
-          id: userData.id,
-          name: userData.name,
-          email: userData.email,
-        )));
+        try {
+          final res = await http.post(
+            Uri.parse('$baseUrl/login/email'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              'id': userData.id,
+            }),
+          );
+
+          if (res.statusCode == 200) {
+            final user = User.fromJson(json.decode(res.body));
+            emit(UserSetState(user));
+          } else {
+            emit(const UserInitialState()); // c
+          }
+        } catch (e) {
+          emit(const UserInitialState()); // c
+        }
       } else {
         emit(const UserInitialState()); // cambiar al estado inicial
       }
@@ -85,10 +98,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           headers: <String, String>{
             'Content-Type': 'application/json',
           },
-          body: jsonEncode(<String, String>{
+          body: jsonEncode({
             'id': event.id,
             'name': event.name,
             'email': event.email,
+            'score': event.score
           }),
         );
 
@@ -108,10 +122,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     });
 
     on<LogoutUser>((event, emit) async {
-      await UserStorage.deleteUserData(); // eliminacion de las credenciales presentes en el local storage
+      await UserStorage
+          .deleteUserData(); // eliminacion de las credenciales presentes en el local storage
       AutoRouter.of(event.context)
           .pushNamed('/') // redireccion a '/'
-          .then((value) => emit(const UserInitialState())); // cambio al estado inicial
+          .then((value) =>
+              emit(const UserInitialState())); // cambio al estado inicial
     });
   }
 }

@@ -58,6 +58,7 @@ class _SectionsListState extends State<SectionsList> {
         name: category,
         expandedValue: lessonsInCategory.map((lesson) {
           return LessonCard(
+            id: lesson.id.oid,
             title: lesson.title,
           );
         }).toList(),
