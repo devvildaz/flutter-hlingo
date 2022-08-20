@@ -13,11 +13,12 @@ import 'package:http/http.dart' as http;
 
 class VideoPreview extends StatefulWidget {
 
-  const VideoPreview({Key? key, required this.urlVideo, this.onNext, this.onPrev}) : super(key: key);
+  const VideoPreview({Key? key, required this.urlVideo, this.onNext, this.onPrev, this.onDispose}) : super(key: key);
 
   final String urlVideo;
   final Function(String)? onNext;
   final VoidCallback? onPrev;
+  final VoidCallback? onDispose;
 
   static Route<void> route(String url) {
     return MaterialPageRoute<void>(builder: (_) => VideoPreview(urlVideo: url));
@@ -90,6 +91,12 @@ class _VideoPreviewState extends State<VideoPreview> {
   }
 
   @override
+  void dispose(){
+    super.dispose();
+    if(widget.onDispose != null ) widget.onDispose!();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(
@@ -148,8 +155,6 @@ class _VideoPreviewState extends State<VideoPreview> {
               ),
             ]
         )
-
-
     );
   }
 }

@@ -105,7 +105,8 @@ class AppRouter extends _i1.RootStackRouter {
               key: args.key,
               urlVideo: args.urlVideo,
               onNext: args.onNext,
-              onPrev: args.onPrev));
+              onPrev: args.onPrev,
+              onDispose: args.onDispose));
     },
     ReviewScreenRoute.name: (routeData) {
       final args = routeData.argsAs<ReviewScreenRouteArgs>();
@@ -332,18 +333,27 @@ class VideoPreviewRoute extends _i1.PageRouteInfo<VideoPreviewRouteArgs> {
       {_i14.Key? key,
       required String urlVideo,
       dynamic Function(String)? onNext,
-      void Function()? onPrev})
+      void Function()? onPrev,
+      void Function()? onDispose})
       : super(VideoPreviewRoute.name,
             path: 'preview',
             args: VideoPreviewRouteArgs(
-                key: key, urlVideo: urlVideo, onNext: onNext, onPrev: onPrev));
+                key: key,
+                urlVideo: urlVideo,
+                onNext: onNext,
+                onPrev: onPrev,
+                onDispose: onDispose));
 
   static const String name = 'VideoPreviewRoute';
 }
 
 class VideoPreviewRouteArgs {
   const VideoPreviewRouteArgs(
-      {this.key, required this.urlVideo, this.onNext, this.onPrev});
+      {this.key,
+      required this.urlVideo,
+      this.onNext,
+      this.onPrev,
+      this.onDispose});
 
   final _i14.Key? key;
 
@@ -353,9 +363,11 @@ class VideoPreviewRouteArgs {
 
   final void Function()? onPrev;
 
+  final void Function()? onDispose;
+
   @override
   String toString() {
-    return 'VideoPreviewRouteArgs{key: $key, urlVideo: $urlVideo, onNext: $onNext, onPrev: $onPrev}';
+    return 'VideoPreviewRouteArgs{key: $key, urlVideo: $urlVideo, onNext: $onNext, onPrev: $onPrev, onDispose: $onDispose}';
   }
 }
 

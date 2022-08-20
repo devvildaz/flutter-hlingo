@@ -84,8 +84,8 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   void dispose() {
-    if(widget.onDispose != null) widget.onDispose!();
     super.dispose();
+    if(widget.onDispose != null) widget.onDispose!();
   }
 
 }

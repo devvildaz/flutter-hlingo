@@ -44,19 +44,8 @@ class _LessonWrapperPageState extends State<LessonWrapperPage> {
   Widget build(BuildContext context) {
     return BlocListener<CameraBloc, CameraState>(
       listener: (context, state) {
-        debugPrint(state.status.name);
-        if(state.cameras.isEmpty) {
-          debugPrint("No hay descripcion con las camaras");
-        } else {
-          debugPrint("Se cuenta con " + state.cameras.length.toString()+ " camara/s");
-        }
-
-        if(state.controller.isEmpty) {
-          debugPrint('La camara no esta incializada ');
-        } else {
-          debugPrint(state.controller.value.description.name);
+        if(state.controller.isPresent) {
           setState(()  {
-            debugPrint("VideoPreview");
             currentState = LessonState.recording;
             controller = state.controller.value;
           });
@@ -88,6 +77,11 @@ class _LessonWrapperPageState extends State<LessonWrapperPage> {
                     });
                   },
                   onPrev: () {
+                    CameraState cameraState = context.read<CameraBloc>().state;
+                    List<CameraDescription> cameras = cameraState.cameras;
+                    context.read<CameraBloc>().add(InitCameraEvent(cameras, cameraState.cameraIdxSelected));
+                  },
+                  onDispose: () {
                     CameraState cameraState = context.read<CameraBloc>().state;
                     List<CameraDescription> cameras = cameraState.cameras;
                     context.read<CameraBloc>().add(InitCameraEvent(cameras, cameraState.cameraIdxSelected));
