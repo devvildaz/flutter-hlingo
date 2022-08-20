@@ -22,7 +22,7 @@ class CameraBloc extends Bloc<CameraEvent, CameraState>{
     on<InitCameraEvent>((event, emit) async {
       var cameras = event.cameras;
       try {
-        CameraController controller = await CameraRepository.initializeCamera(cameras, event.idxSelected);
+        CameraController controller = await CameraRepository.initializeCamera(cameras, event.idxSelected, false);
         // print(" " + controller.description.toString());
         emit(CameraState(
             status: CamStatus.success,

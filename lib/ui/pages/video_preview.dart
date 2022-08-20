@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'dart:convert';
 import 'package:auto_route/auto_route.dart';
 import 'package:ffmpeg_kit_flutter/ffprobe_kit.dart';
 import "package:flutter/material.dart";
@@ -8,13 +9,14 @@ import 'package:video_player/video_player.dart';
 import 'package:path/path.dart' as path;
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit_config.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
+import 'package:http/http.dart' as http;
 
 class VideoPreview extends StatefulWidget {
 
   const VideoPreview({Key? key, required this.urlVideo, this.onNext, this.onPrev}) : super(key: key);
 
   final String urlVideo;
-  final VoidCallback? onNext;
+  final Function(String)? onNext;
   final VoidCallback? onPrev;
 
   static Route<void> route(String url) {
@@ -26,9 +28,11 @@ class VideoPreview extends StatefulWidget {
 }
 
 class _VideoPreviewState extends State<VideoPreview> {
+  late String urlVideo;
   VideoPlayerController? _videoPlayerController;
   bool isPause = false;
   String information = "<unavailable>";
+  File? videoTarget;
 
   @override
   void initState() {
@@ -41,13 +45,15 @@ class _VideoPreviewState extends State<VideoPreview> {
   }
 
   Future<void> initializeCamera() async {
-    String resultPath = await resizeVideo(widget.urlVideo);
-    _videoPlayerController = VideoPlayerController.file(File(resultPath));
+    urlVideo = widget.urlVideo;
+    urlVideo = await resizeVideo(urlVideo);
+    videoTarget = File(urlVideo);
+    _videoPlayerController = VideoPlayerController.file(videoTarget!);
 
     await _videoPlayerController?.initialize();
     await _videoPlayerController?.setLooping(true);
     await _videoPlayerController?.play();
-    await getVideoInfo(resultPath);
+    await getVideoInfo(urlVideo);
   }
 
   Future<void> getVideoInfo(String videoTarget) async {
@@ -75,7 +81,7 @@ class _VideoPreviewState extends State<VideoPreview> {
     directoryCache = directoryCache.sublist(0, directoryCache.length - 1);
     String resultPath = path.join(directoryCache.join('/'), filename ) ;
     debugPrint(resultPath);
-    await FFmpegKit.execute("-i $videoTarget -t 00:02:00  -vf scale=640x480 -r 30 -an $resultPath");
+    await FFmpegKit.execute("-i $videoTarget -vf scale=640x480 -r 30 -an $resultPath");
     FFmpegKitConfig.enableLogCallback((log) {
       debugPrint(log.getMessage());
     });
@@ -127,11 +133,15 @@ class _VideoPreviewState extends State<VideoPreview> {
                             },
                           ),
                         ),
-                        onPressed: () {
-                          if(widget.onNext != null) widget.onNext!();
+                        onPressed: () async {
+                          var request = http.MultipartRequest("POST", Uri.http("3.95.20.196", "predict"));
+                          request.files.add(await http.MultipartFile.fromPath('file', urlVideo));
+                          var response = await request.send();
+                          var result = await http.Response.fromStream(response);
+                          if(widget.onNext != null) widget.onNext!(result.body);
                         },
-                        icon: Icon(Icons.upload),
-                        label:  Text("Subir video"),
+                        icon: const Icon(Icons.upload),
+                        label:  const Text("Subir video"),
                     )
                   ],
                 ),

@@ -32,6 +32,7 @@ class _LessonWrapperPageState extends State<LessonWrapperPage> {
   late LessonState currentState;
   late CameraController controller;
   late String videoUrl;
+  late String response;
 
   @override
   void initState() {
@@ -79,17 +80,21 @@ class _LessonWrapperPageState extends State<LessonWrapperPage> {
               ),
               if(currentState == LessonState.videoPreview) VideoPreviewRoute(
                   urlVideo: videoUrl,
-                  onNext: () {
+                  onNext: (String result) {
+
                     setState((){
+                      response = result;
                       currentState = LessonState.evaluate;
                     });
                   },
                   onPrev: () {
-                    List<CameraDescription> cameras = context.read<CameraBloc>().state.cameras;
-                    context.read<CameraBloc>().add(InitCameraEvent(cameras, 0));
+                    CameraState cameraState = context.read<CameraBloc>().state;
+                    List<CameraDescription> cameras = cameraState.cameras;
+                    context.read<CameraBloc>().add(InitCameraEvent(cameras, cameraState.cameraIdxSelected));
                   }
               ),
               if(currentState == LessonState.evaluate) ReviewScreenRoute(
+                  result: response,
                   againOption: () {
                     setState(() {
                       currentState = LessonState.mainView;

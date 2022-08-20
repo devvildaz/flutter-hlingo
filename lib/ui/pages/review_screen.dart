@@ -1,20 +1,39 @@
 import "package:flutter/material.dart";
+import 'dart:convert';
 
 class ReviewScreen extends StatefulWidget {
-  const ReviewScreen({Key? key, this.againOption, this.returnOption}) : super(key: key);
+  const ReviewScreen({Key? key, this.againOption, this.returnOption, required this.result}) : super(key: key);
 
+  final String result;
   final VoidCallback? againOption;
   final VoidCallback? returnOption;
 
-  static Route<void> route() {
-    return MaterialPageRoute<void>(builder: (_) => const ReviewScreen());
-  }
 
   @override
   State<ReviewScreen> createState() => _ReviewScreenState();
 }
 
 class _ReviewScreenState extends State<ReviewScreen> {
+  late String bestSign;
+  late String bestScore;
+
+  @override
+  void initState() {
+    super.initState();
+    Map<String,dynamic> predictions = json.decode(widget.result)['predictions'][0];
+    double max = -0.1;
+    String keyTarget = "<na>";
+    bool ini = true;
+    for(MapEntry<String, dynamic> item in predictions.entries) {
+      if(max < item.value) {
+        max = item.value;
+        keyTarget = item.key;
+      }
+    }
+    bestSign = keyTarget;
+    bestScore = (max * 100).toStringAsFixed(2);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,11 +43,11 @@ class _ReviewScreenState extends State<ReviewScreen> {
         child: Column(
           children: [
             Container(
-              child: Text("Puntaje", style: TextStyle(fontSize: 48)),
+              child: Text(bestSign, style: TextStyle(fontSize: 48)),
               margin: const EdgeInsets.only(bottom: 50.0),
             ),
             Container(
-              child: Text("9.0", style: TextStyle(fontSize: 56)),
+              child: Text(bestScore, style: TextStyle(fontSize: 56)),
               margin: const EdgeInsets.only(bottom: 50.0),
             ),
             ElevatedButton.icon(

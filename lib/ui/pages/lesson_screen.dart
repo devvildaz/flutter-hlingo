@@ -85,7 +85,7 @@ class _LessonScreenState extends State<LessonPage> {
                               debugPrint('La longitud de: ' + state.cameras.length.toString());
                               if(state.controller.isEmpty) {
                                 debugPrint("no iniciado");
-                                context.read<CameraBloc>().add(InitCameraEvent(state.cameras, 0));
+                                context.read<CameraBloc>().add(InitCameraEvent(state.cameras, 1));
                                 setState(() {
                                   isLoadingCamera = true;
                                 });
@@ -107,11 +107,14 @@ class _LessonScreenState extends State<LessonPage> {
                                 ) ,
                                 const Text("Grabar y practicar"),
                               ] : [
+                                /*
                                 const SizedBox(
-                                  child: CircularProgressIndicator(strokeWidth: 2,),
+                                  //child: CircularProgressIndicator(strokeWidth: 2,),
+                                  child: const Container(),
                                   width: 16.0,
                                   height: 16.0,
                                 )
+                                 */
                               ],
                             )
                         )

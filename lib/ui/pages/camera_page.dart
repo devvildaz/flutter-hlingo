@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:camera/camera.dart';
 import "package:flutter/material.dart";
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hlingo/bloc/camera/camera_bloc.dart';
 import 'package:hlingo/main.dart';
@@ -24,6 +25,7 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   void initState() {
+    SystemChrome.setEnabledSystemUIOverlays([]);
     super.initState();
   }
 
@@ -33,25 +35,23 @@ class _CameraPageState extends State<CameraPage> {
       body: Center(
         child: Stack(
           children: [
-            Center(
-              child: AspectRatio(
-                aspectRatio: 1/widget.cameraController.value.aspectRatio,
-                child: widget.cameraController.buildPreview(),
-              ),
-            ),
+            CameraPreview(widget.cameraController),
             Positioned.fill(
-              bottom: 10,
+              bottom: 12,
               child: Align(
                 alignment: Alignment.bottomCenter,
                   child: RecordingButton(
+                      controller: widget.cameraController,
+                      finishProcess: () async {
+                        await widget.cameraController.stopVideoRecording();
+                      },
                       startedRecording: () async {
-                        await widget.cameraController?.prepareForVideoRecording();
-                        await widget.cameraController?.startVideoRecording();
+                        await widget.cameraController.startVideoRecording();
                       },
                       terminatedRecording: () async {
-                        final file = await widget.cameraController?.stopVideoRecording();
-                        debugPrint(file?.path?.toString() ?? "no path");
-                        String path = file!.path!.toString();
+                        final file = await widget.cameraController.stopVideoRecording();
+                        debugPrint(file.path.toString());
+                        String path = file.path.toString();
                         //Navigator.of(context).push(VideoPreview.route(path));
                         if(widget.onTerminate != null) widget.onTerminate!(path);
                       }

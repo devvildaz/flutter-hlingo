@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -8,12 +9,16 @@ import 'package:hlingo/ui/pages/lesson_wrapper.dart';
 class RecordingButton extends StatefulWidget {
   final Function terminatedRecording;
   final Function startedRecording;
+  final Function finishProcess;
   final double duration;
   final double waitTime;
+  final CameraController controller;
   const RecordingButton({
     Key? key,
     required this.startedRecording,
     required this.terminatedRecording,
+    required this.finishProcess,
+    required this.controller,
     this.duration = 2000,
     this.waitTime = 3000,
   }) : super(key: key);
@@ -36,8 +41,9 @@ class _RecordingButtonState extends State<RecordingButton> {
   double _waittimer = 3000;
   ValueNotifier<double> progress = ValueNotifier<double>(1);
 
-  void startWaitTimer() {
-    const hundredMs = Duration(milliseconds: 100);
+  void startWaitTimer() async {
+    await widget.controller.prepareForVideoRecording();
+    const hundredMs = Duration(milliseconds: 10);
     setState(() {
       currentState = RecordingState.WAIT;
     });
@@ -48,26 +54,27 @@ class _RecordingButtonState extends State<RecordingButton> {
             _waittimer = 3000;
             _waitTimer?.cancel();
             currentState = RecordingState.RECORDING;
-            widget.startedRecording();
             startTimer();
           } else {
             setState(() {
-              _waittimer -= 100;
+              _waittimer -= 10;
             });
           }
         }
     );
   }
 
-  void startTimer() {
+  void startTimer() async {
     const hundredMs = Duration(milliseconds: 10);
+    await widget.controller.startVideoRecording();
+    setState(() {
+      currentState = RecordingState.RECORDING;
+    });
     _timer = Timer.periodic(hundredMs,
       (Timer timer) {
-          if(_start < 0) {
-            setState(() {
-              resetTimer();
-              widget.terminatedRecording();
-            });
+          if(_start <= 0) {
+            resetTimer();
+            widget.terminatedRecording();
           } else {
             setState(() {
               _start -= 10;
@@ -80,8 +87,9 @@ class _RecordingButtonState extends State<RecordingButton> {
 
   @override
   void dispose() {
-    _timer?.cancel();
     super.dispose();
+    _timer?.cancel();
+    _waitTimer?.cancel();
   }
 
   resetTimer() {
@@ -99,9 +107,7 @@ class _RecordingButtonState extends State<RecordingButton> {
       case RecordingState.IDLE:
         return ElevatedButton(
             onPressed: () {
-              setState(() {
-                startWaitTimer();
-              });
+              startWaitTimer();
             },
             style: ElevatedButton.styleFrom(
                 primary: Colors.redAccent,
@@ -130,11 +136,11 @@ class _RecordingButtonState extends State<RecordingButton> {
           height: 80,
           child: CustomPaint(
               size: const Size(80,80),
-              painter: DashedRecorButton(progressValue: progress ),
+              painter: DashedRecordButton(progressValue: progress ),
               child: GestureDetector(
                 onTap: () {
                   resetTimer();
-                  widget.terminatedRecording();
+                  widget.finishProcess();
                 },
                 child: const Center(
                   child:  Icon(
@@ -151,9 +157,9 @@ class _RecordingButtonState extends State<RecordingButton> {
   }
 }
 
-class DashedRecorButton extends CustomPainter {
+class DashedRecordButton extends CustomPainter {
   late ValueNotifier<double>  progress;
-  DashedRecorButton({
+  DashedRecordButton({
     required ValueNotifier<double>  progressValue
   }) : super(repaint: progressValue) {
     progress =  progressValue;

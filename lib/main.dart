@@ -23,6 +23,7 @@ void setUp() {
 }
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
   setUp();
   runApp(MyApp());

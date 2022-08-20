@@ -38,19 +38,19 @@ dependencies:
   cupertino_icons: ^1.0.2
   image_picker: ^0.8.5+3
   video_player: ^2.4.2
-  camera: ^0.9.7
-  flutter_secure_storage: ^5.0.2
+  camera: 0.10.0+1
+  flutter_secure_storage: 5.0.2
   http: ^0.13.4
-  auto_route: ^4.2.1
+  auto_route: 4.2.1
   equatable: ^2.0.0
   optional: 6.1.0+1
   get_it: 7.2.0
   ffmpeg_kit_flutter: 4.5.1
 
 dev_dependencies:
-  auto_route_generator:
+  auto_route_generator: 4.2.1
   build_runner:
-  flutter_lints: ^1.0.0
+  flutter_lints: 1.0.4
   flutter_test:
     sdk: flutter
 

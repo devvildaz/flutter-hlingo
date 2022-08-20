@@ -108,14 +108,14 @@ class AppRouter extends _i1.RootStackRouter {
               onPrev: args.onPrev));
     },
     ReviewScreenRoute.name: (routeData) {
-      final args = routeData.argsAs<ReviewScreenRouteArgs>(
-          orElse: () => const ReviewScreenRouteArgs());
+      final args = routeData.argsAs<ReviewScreenRouteArgs>();
       return _i1.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i13.ReviewScreen(
               key: args.key,
               againOption: args.againOption,
-              returnOption: args.returnOption));
+              returnOption: args.returnOption,
+              result: args.result));
     }
   };
 
@@ -331,7 +331,7 @@ class VideoPreviewRoute extends _i1.PageRouteInfo<VideoPreviewRouteArgs> {
   VideoPreviewRoute(
       {_i14.Key? key,
       required String urlVideo,
-      void Function()? onNext,
+      dynamic Function(String)? onNext,
       void Function()? onPrev})
       : super(VideoPreviewRoute.name,
             path: 'preview',
@@ -349,7 +349,7 @@ class VideoPreviewRouteArgs {
 
   final String urlVideo;
 
-  final void Function()? onNext;
+  final dynamic Function(String)? onNext;
 
   final void Function()? onPrev;
 
@@ -365,19 +365,22 @@ class ReviewScreenRoute extends _i1.PageRouteInfo<ReviewScreenRouteArgs> {
   ReviewScreenRoute(
       {_i14.Key? key,
       void Function()? againOption,
-      void Function()? returnOption})
+      void Function()? returnOption,
+      required String result})
       : super(ReviewScreenRoute.name,
             path: 'review',
             args: ReviewScreenRouteArgs(
                 key: key,
                 againOption: againOption,
-                returnOption: returnOption));
+                returnOption: returnOption,
+                result: result));
 
   static const String name = 'ReviewScreenRoute';
 }
 
 class ReviewScreenRouteArgs {
-  const ReviewScreenRouteArgs({this.key, this.againOption, this.returnOption});
+  const ReviewScreenRouteArgs(
+      {this.key, this.againOption, this.returnOption, required this.result});
 
   final _i14.Key? key;
 
@@ -385,8 +388,10 @@ class ReviewScreenRouteArgs {
 
   final void Function()? returnOption;
 
+  final String result;
+
   @override
   String toString() {
-    return 'ReviewScreenRouteArgs{key: $key, againOption: $againOption, returnOption: $returnOption}';
+    return 'ReviewScreenRouteArgs{key: $key, againOption: $againOption, returnOption: $returnOption, result: $result}';
   }
 }
