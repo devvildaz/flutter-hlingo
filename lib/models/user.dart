@@ -21,7 +21,7 @@ class User {
   String name;
   String email;
   String? password = "";
-  int? score = 0;
+  double? score = 0;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],

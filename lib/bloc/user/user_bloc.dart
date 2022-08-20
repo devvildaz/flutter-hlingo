@@ -107,7 +107,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         );
 
         if (response.statusCode == 200 || response.statusCode == 201) {
-          print("Updated");
           final user = User.fromJson(json.decode(response.body));
 
           await UserStorage.setUserData(

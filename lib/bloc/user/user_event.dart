@@ -31,7 +31,7 @@ class UpdateUser extends UserEvent {
   final String id;
   final String name;
   final String email;
-  final int score;
+  final double score;
 
   UpdateUser(
       {required this.id,
