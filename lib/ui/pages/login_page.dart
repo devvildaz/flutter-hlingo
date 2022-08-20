@@ -98,7 +98,8 @@ class _LoginPage extends State<LoginPage> {
                           BlocProvider.of<UserBloc>(context, listen: false).add(
                               LoginUser(
                                   email: _user.email,
-                                  password: _user.password));
+                                  password: _user.password)
+                              );
                         }
                       },
                       child: BlocListener<UserBloc, UserState>(

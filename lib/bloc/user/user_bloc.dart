@@ -74,7 +74,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           email: userData.email,
         )));
       } else {
-        emit(const UserInitialState());
+        emit(const UserInitialState()); // cambiar al estado inicial
       }
     }));
 
@@ -108,10 +108,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     });
 
     on<LogoutUser>((event, emit) async {
-      await UserStorage.deleteUserData();
+      await UserStorage.deleteUserData(); // eliminacion de las credenciales presentes en el local storage
       AutoRouter.of(event.context)
-          .pushNamed('/')
-          .then((value) => emit(const UserInitialState()));
+          .pushNamed('/') // redireccion a '/'
+          .then((value) => emit(const UserInitialState())); // cambio al estado inicial
     });
   }
 }
