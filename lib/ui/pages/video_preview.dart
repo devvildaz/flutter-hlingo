@@ -82,7 +82,7 @@ class _VideoPreviewState extends State<VideoPreview> {
     directoryCache = directoryCache.sublist(0, directoryCache.length - 1);
     String resultPath = path.join(directoryCache.join('/'), filename ) ;
     debugPrint(resultPath);
-    await FFmpegKit.execute("-i $videoTarget -vf scale=640x480 -r 30 -an $resultPath");
+    await FFmpegKit.execute("-i $videoTarget -vf scale=400x400 -r 30 -an $resultPath");
     FFmpegKitConfig.enableLogCallback((log) {
       debugPrint(log.getMessage());
     });
@@ -141,7 +141,7 @@ class _VideoPreviewState extends State<VideoPreview> {
                           ),
                         ),
                         onPressed: () async {
-                          var request = http.MultipartRequest("POST", Uri.http("3.95.20.196", "predict"));
+                          var request = http.MultipartRequest("POST", Uri.http("54.196.250.26", "predict"));
                           request.files.add(await http.MultipartFile.fromPath('file', urlVideo));
                           var response = await request.send();
                           var result = await http.Response.fromStream(response);
