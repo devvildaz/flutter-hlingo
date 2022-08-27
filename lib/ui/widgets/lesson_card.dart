@@ -38,8 +38,9 @@ class LessonCard extends StatelessWidget {
                   ),
                   child: Column(children: [
                     // TODO: change to imgUrl
-                    Image.asset("assets/logo.png", height: 64),
-                    Text(title)
+                    Image.asset("assets/logo.png", height: 54),
+                    // align center
+                    Text(title, textAlign: TextAlign.center),
                   ]),
                 )),
           );

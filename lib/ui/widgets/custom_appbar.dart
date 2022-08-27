@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hlingo/bloc/user/user_bloc.dart';
 
 class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppbar({Key? key}) : super(key: key);
@@ -26,21 +28,6 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
           )
         ],
       ),
-      actions: [
-        const Icon(
-          Icons.star,
-          color: Colors.amber,
-          size: 32,
-        ),
-        Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: const Text(
-            "36/120",
-            style: TextStyle(fontSize: 16),
-          ),
-        ),
-      ],
     );
   }
 }
