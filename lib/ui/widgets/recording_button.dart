@@ -1,24 +1,18 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-import 'package:hlingo/ui/pages/lesson_wrapper.dart';
-
 class RecordingButton extends StatefulWidget {
-  final Function terminatedRecording;
-  final Function startedRecording;
-  final Function finishProcess;
+  final Function? terminatedRecording;
+  final Function? startedRecording;
+  final Function? interruptRecording;
   final double duration;
   final double waitTime;
-  final CameraController controller;
   const RecordingButton({
     Key? key,
     required this.startedRecording,
     required this.terminatedRecording,
-    required this.finishProcess,
-    required this.controller,
+    required this.interruptRecording,
     this.duration = 2000,
     this.waitTime = 3000,
   }) : super(key: key);
@@ -38,43 +32,43 @@ class _RecordingButtonState extends State<RecordingButton> {
   Timer? _waitTimer;
   RecordingState currentState = RecordingState.IDLE;
   double _start = 2000;
-  double _waittimer = 3000;
+  double _wait = 3000;
   ValueNotifier<double> progress = ValueNotifier<double>(1);
 
-  void startWaitTimer() async {
-    await widget.controller.prepareForVideoRecording();
-    const hundredMs = Duration(milliseconds: 10);
+  Future<void> startWaitTimer() async {
     setState(() {
       currentState = RecordingState.WAIT;
     });
-    _waitTimer = Timer.periodic(
-        hundredMs,
-        (Timer timer) {
-          if(_waittimer <= 0) {
-            _waittimer = 3000;
-            _waitTimer?.cancel();
-            currentState = RecordingState.RECORDING;
-            startTimer();
+    _timer = Timer.periodic(const Duration(milliseconds: 10),
+            (Timer timer) {
+          if(_wait == 0) {
+            setState(() {
+              _wait = widget.waitTime;
+              _timer?.cancel();
+              startTimer();
+            });
           } else {
             setState(() {
-              _waittimer -= 10;
+              _wait -= 10;
+              progress.value = _wait / widget.waitTime;
             });
           }
         }
     );
   }
 
-  void startTimer() async {
-    const hundredMs = Duration(milliseconds: 10);
-    await widget.controller.startVideoRecording();
+  Future<void> startTimer() async {
     setState(() {
       currentState = RecordingState.RECORDING;
     });
+    await widget.startedRecording!();
+    const hundredMs = Duration(milliseconds: 10);
+
     _timer = Timer.periodic(hundredMs,
       (Timer timer) {
-          if(_start <= 0) {
+          if(_start == 0) {
             resetTimer();
-            widget.terminatedRecording();
+            if(widget.terminatedRecording != null) widget.terminatedRecording!();
           } else {
             setState(() {
               _start -= 10;
@@ -106,8 +100,8 @@ class _RecordingButtonState extends State<RecordingButton> {
     switch(currentState) {
       case RecordingState.IDLE:
         return ElevatedButton(
-            onPressed: () {
-              startWaitTimer();
+            onPressed: () async {
+              await startWaitTimer();
             },
             style: ElevatedButton.styleFrom(
                 primary: Colors.redAccent,
@@ -128,7 +122,7 @@ class _RecordingButtonState extends State<RecordingButton> {
                 fixedSize: const Size(80, 80),
                 shape: const CircleBorder()
             ),
-            child: Text((_waittimer / 1000).ceil().toString(), style: const TextStyle(fontSize: 32),)
+            child: Text((_wait / 1000).ceil().toString(), style: const TextStyle(fontSize: 32),)
         );
       case RecordingState.RECORDING:
         return SizedBox(
@@ -140,7 +134,7 @@ class _RecordingButtonState extends State<RecordingButton> {
               child: GestureDetector(
                 onTap: () {
                   resetTimer();
-                  widget.finishProcess();
+                  if(widget.interruptRecording !=null) widget.interruptRecording!();
                 },
                 child: const Center(
                   child:  Icon(

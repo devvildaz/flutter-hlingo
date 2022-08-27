@@ -37,7 +37,7 @@ class Lesson {
         "_id": id.toJson(),
         "title": title,
         "description": description,
-        "example_video": exampleVideo,
+        "example": exampleVideo,
         "category_name": categoryName,
         "date_created": dateCreated?.toJson(),
       };

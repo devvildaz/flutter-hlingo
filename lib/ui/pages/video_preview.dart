@@ -35,6 +35,8 @@ class _VideoPreviewState extends State<VideoPreview> {
   String information = "<unavailable>";
   File? videoTarget;
 
+  bool reqLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -54,7 +56,6 @@ class _VideoPreviewState extends State<VideoPreview> {
     await _videoPlayerController?.initialize();
     await _videoPlayerController?.setLooping(true);
     await _videoPlayerController?.play();
-    await getVideoInfo(urlVideo);
   }
 
   Future<void> getVideoInfo(String videoTarget) async {
@@ -81,11 +82,7 @@ class _VideoPreviewState extends State<VideoPreview> {
     String filename = '${path.basenameWithoutExtension(videoTarget)}_cache.mp4';
     directoryCache = directoryCache.sublist(0, directoryCache.length - 1);
     String resultPath = path.join(directoryCache.join('/'), filename ) ;
-    debugPrint(resultPath);
     await FFmpegKit.execute("-i $videoTarget -vf scale=400x400 -r 30 -an $resultPath");
-    FFmpegKitConfig.enableLogCallback((log) {
-      debugPrint(log.getMessage());
-    });
 
     return resultPath;
   }
@@ -99,36 +96,29 @@ class _VideoPreviewState extends State<VideoPreview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
-            children:[
-              Container(
-                decoration: const BoxDecoration(
-
-                ),
-              ),
+        body:
               Center(
-                child: Column(
+                child: _videoPlayerController != null ? Column(
                   children: [
                     Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(32.0),
                         child: Center(
                             child: _videoPlayerController == null ?
                             Container():
                             Center(
                                 child: _videoPlayerController!.value.isInitialized ?
                                 SizedBox(
-                                  height: 500,
+                                  height: 600,
                                   child: AspectRatio(
                                       aspectRatio: _videoPlayerController!.value.aspectRatio,
                                       child: VideoPlayer(_videoPlayerController!)
                                   ) ,
                                 )
                                     :
-                                Container()
+                                const CircularProgressIndicator()
                             )
                         )
                     ),
-                    // Text(information)
                     ElevatedButton.icon(
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.resolveWith<Color?>(
@@ -140,21 +130,41 @@ class _VideoPreviewState extends State<VideoPreview> {
                             },
                           ),
                         ),
-                        onPressed: () async {
-                          var request = http.MultipartRequest("POST", Uri.http("54.196.250.26", "predict"));
+                        onPressed: _videoPlayerController != null && !reqLoading ? () async {
+                          var request = http.MultipartRequest("POST", Uri.http("34.236.148.76", "predict"));
                           request.files.add(await http.MultipartFile.fromPath('file', urlVideo));
+                          setState(() {
+                            reqLoading = true;
+                          });
                           var response = await request.send();
                           var result = await http.Response.fromStream(response);
+                          setState(() {
+                            reqLoading = false;
+                          });
+                          if(!mounted) return;
+                          if(result.statusCode != 200) {
+                            showDialog(context: context, builder: (ctx)  {
+                              return AlertDialog(
+                                title: Text("Error"),
+                                content: Text("Intente realizar la operacion de nuevo"),
+                                actions: <Widget>[
+                                  FlatButton(onPressed: () {
+                                    Navigator.of(ctx).pop();
+                                  }, child: Text("Ok"))
+                                ],
+                              );
+                            });
+                            return;
+                          }
+
                           if(widget.onNext != null) widget.onNext!(result.body);
-                        },
+                        } : null,
                         icon: const Icon(Icons.upload),
-                        label:  const Text("Subir video"),
+                        label:  !reqLoading ? const Text("Subir video") : const CircularProgressIndicator(),
                     )
                   ],
-                ),
+                ) : const CircularProgressIndicator(),
               ),
-            ]
-        )
     );
   }
 }

@@ -45,7 +45,7 @@ import 'package:hlingo/ui/pages/video_preview.dart';
             name: "LessonWrapperRoute",
             page: LessonWrapperPage,
             children: [
-              AutoRoute(path: "", name: "LessonRoute", page: LessonPage),
+              AutoRoute(path: "", name: "LessonRoute", page: LessonPage, initial: true),
               AutoRoute(path: "camera", name: "LessonCameraRoute", page: CameraPage),
               AutoRoute(path: 'preview', name: "VideoPreviewRoute", page: VideoPreview),
               AutoRoute(path: 'review', name: 'ReviewScreenRoute', page: ReviewScreen)

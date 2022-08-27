@@ -75,7 +75,10 @@ class _SearchPageState extends State<SearchPage> {
                     .asMap()
                     .entries
                     .map((lesson) => LessonCard(
-                        id: lesson.value.id.oid, title: lesson.value.title))
+                        id: lesson.value.id.oid,
+                        title: lesson.value.title,
+                        description: lesson.value.description)
+                    )
                     .toList()),
           ],
         ));

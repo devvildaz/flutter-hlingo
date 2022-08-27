@@ -7,10 +7,12 @@ import 'package:hlingo/routes/router.gr.dart';
 class LessonCard extends StatelessWidget {
   final String id;
   final String title;
+  final String description;
   final String? imgUrl;
+  final String? trainVideo;
 
   const LessonCard(
-      {Key? key, required this.id, required this.title, this.imgUrl})
+      {Key? key, required this.id, required this.title, required this.description ,this.imgUrl, this.trainVideo})
       : super(key: key);
 
   @override
@@ -26,22 +28,17 @@ class LessonCard extends StatelessWidget {
                 onTap: () {
                   debugPrint('go to lesson ' + title);
                   context.read<CameraBloc>().add(const LoadCamerasEvent());
-                  AutoRouter.of(context).push(LessonWrapperRoute(id: title));
+                  AutoRouter.of(context).push(LessonWrapperRoute(id: title, description: description,trainVideo: trainVideo));
                 },
                 child: Container(
                   width: 120,
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(8),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black38),
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: Column(children: [
-                    // TODO: change to imgUrl
-                    Image.asset("assets/logo.png", height: 54),
-                    // align center
-                    Text(title, textAlign: TextAlign.center),
-                  ]),
+ child: Text(title)
                 )),
           );
         });

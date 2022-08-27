@@ -1,16 +1,21 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:camera/camera.dart';
 import "package:flutter/material.dart";
 import "package:hlingo/bloc/camera/camera_bloc.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
-import 'package:optional/optional.dart';
 import "../widgets/lesson_icon.dart";
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class LessonPage extends StatefulWidget {
   final String id;
+  final String description;
+  final VoidCallback onNext;
+  final String? urlVideo;
+
   const LessonPage({
     Key? key,
     required this.id,
+    required this.description,
+    required this.onNext,
+    this.urlVideo
   }) : super(key: key);
   
   @override
@@ -22,7 +27,7 @@ final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
 );
 
 class _LessonScreenState extends State<LessonPage> {
-
+  InAppWebViewController? webView;
   bool isLoadingCamera = false;
 
   @override
@@ -41,10 +46,11 @@ class _LessonScreenState extends State<LessonPage> {
           LessonIconWidget(title: widget.id),
           BlocConsumer<CameraBloc,CameraState>(
             listener: (context, state) {
+              print(state.cameras);
               print("consumer a state changed event");
               //context.read<CameraBloc>().add(RemoveCameraEvent(state.cameras, state.controller.value));]
               if(state.controller.isEmpty) {
-                print("consumer a state changed event - ControllerIsEmpty");
+
                 setState(() {
                   isLoadingCamera = false;
                 });
@@ -61,8 +67,28 @@ class _LessonScreenState extends State<LessonPage> {
                       mainAxisSpacing: 10,
                       children: [
                         ElevatedButton(
-                            onPressed: false ? () {
-
+                            onPressed: widget.urlVideo != null ? () {
+                              showDialog(context: context, builder: (ctx)  {
+                                return AlertDialog(
+                                  title: const Text("Video de prueba"),
+                                  content: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 400,
+                                    child:
+                                      Expanded(
+                                          child: InAppWebView(
+                                          initialUrlRequest: URLRequest(
+                                            url: Uri.parse(widget.urlVideo!),
+                                          )
+                                      ))
+                                  ),
+                                  actions: <Widget>[
+                                    FlatButton(onPressed: () {
+                                      Navigator.of(ctx).pop();
+                                    }, child: const Text("Ok"))
+                                  ],
+                                );
+                              });
                             } : null,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -80,23 +106,12 @@ class _LessonScreenState extends State<LessonPage> {
                             )
                         ),
                         ElevatedButton(
-
-                            onPressed: !isLoadingCamera ?  () {
-                              debugPrint('La longitud de: ' + state.cameras.length.toString());
-                              if(state.controller.isEmpty) {
-                                debugPrint("no iniciado");
-                                context.read<CameraBloc>().add(InitCameraEvent(state.cameras, 1));
-                                setState(() {
-                                  isLoadingCamera = true;
-                                });
-                              }
-                              else {
-                                debugPrint("iniciado");
-                              }
-                            } : null ,
+                            onPressed: () {
+                              widget.onNext();
+                            } ,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: !isLoadingCamera ?  [
+                              children: true ?  [
                                 Container(
                                     margin: const EdgeInsets.only(right: 8),
                                     child: const Icon(
