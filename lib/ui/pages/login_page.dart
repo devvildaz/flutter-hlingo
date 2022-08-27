@@ -105,7 +105,7 @@ class _LoginPage extends State<LoginPage> {
                       child: BlocListener<UserBloc, UserState>(
                           listener: (context, state) {
                             if (state.userState == AuthState.authenticated) {
-                              AutoRouter.of(context).pushNamed("/home");
+                              AutoRouter.of(context).replaceNamed("/home");
                             } else if (state.userState == AuthState.error) {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(

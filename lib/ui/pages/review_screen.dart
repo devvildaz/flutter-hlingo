@@ -50,7 +50,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
             child: Column(
               children: [
                 Container(
-                  child: Text(bestSign, style: const TextStyle(fontSize: 48)),
+                  child: Text("Puntaje", style: const TextStyle(fontSize: 48)),
                   margin: const EdgeInsets.only(bottom: 50.0),
                 ),
                 Container(
@@ -63,7 +63,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                         id: state.user!.id!,
                         name: state.user!.name,
                         email: state.user!.email,
-                        score: state.user!.score! + value
+                        score: state.user!.score! + double.parse((value/20.0).toStringAsFixed(2))
                     ));
                     if(widget.againOption != null) widget.againOption!();
                   } ,
@@ -72,6 +72,12 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 ),
                 ElevatedButton.icon(
                   onPressed: () {
+                    context.read<UserBloc>().add(UpdateUser(
+                        id: state.user!.id!,
+                        name: state.user!.name,
+                        email: state.user!.email,
+                        score: state.user!.score! + double.parse((value/20.0).toStringAsFixed(2))
+                    ));
                     if(widget.returnOption != null) widget.returnOption!();
                   } ,
                   icon: const Icon(Icons.home_filled),

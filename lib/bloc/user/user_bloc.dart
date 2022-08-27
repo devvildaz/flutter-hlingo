@@ -102,7 +102,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             'id': event.id,
             'name': event.name,
             'email': event.email,
-            'score': event.score
+            'score':  double.parse((event.score).toStringAsFixed(2))
           }),
         );
 
