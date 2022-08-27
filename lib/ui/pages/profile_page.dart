@@ -13,21 +13,26 @@ class ProfilePage extends StatelessWidget {
       appBar: const CustomAppbar(),
       body: Column(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Image.asset(
-                  'assets/profile.png',
-                  width: 200.0,
-                  height: 200.0,
-                ),
-              )
-            ],
-          ),
           BlocBuilder<UserBloc, UserState>(builder: (_, state) {
             if (state.user != null) {
               return Column(
                 children: [
+                  Container(
+                      width: 120,
+                      height: 120,
+                      margin: const EdgeInsets.symmetric(vertical: 20),
+                      decoration: BoxDecoration(
+                          color: Colors.indigo[600],
+                          borderRadius: BorderRadius.circular(100)),
+                      child: Center(
+                          child: Text(
+                        state.user!.name.substring(0, 1).toUpperCase(),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 48,
+                            fontWeight: FontWeight.w500),
+                      ))),
                   Text(
                     state.user!.name,
                     textAlign: TextAlign.center,
@@ -37,7 +42,24 @@ class ProfilePage extends StatelessWidget {
                     state.user!.email,
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
-                  )
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 48),
+                    child: const Text(
+                      "PUNTUACIÓN",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 28, color: Colors.indigo),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 32),
+                    child: Text(
+                      state.user!.score.toString(),
+                      textAlign: TextAlign.center,
+                      style:
+                          const TextStyle(fontSize: 24, color: Colors.indigo),
+                    ),
+                  ),
                 ],
               );
             } else {
@@ -45,62 +67,6 @@ class ProfilePage extends StatelessWidget {
             }
           }),
           const SizedBox(height: 50),
-          Row(children: const [
-            SizedBox(width: 20),
-            Text("Sesiones completadas",
-                style: TextStyle(fontSize: 16, color: Colors.black))
-          ]),
-          Row(
-            children: [
-              SizedBox(
-                width: 350,
-                height: 20,
-                child: CustomPaint(
-                  painter: OpenPainter(),
-                ),
-              ),
-            ],
-          ),
-          Row(children: const [
-            SizedBox(width: 20),
-            SizedBox(
-                width: 350,
-                height: 20,
-                child: Text(
-                  "8/12",
-                  style: TextStyle(fontSize: 12, color: Colors.black),
-                  textAlign: TextAlign.right,
-                )),
-          ]),
-          const SizedBox(height: 10),
-          Row(children: const [
-            SizedBox(width: 20),
-            Text("Puntaje Total",
-                style: TextStyle(fontSize: 16, color: Colors.black))
-          ]),
-          Row(
-            children: [
-              SizedBox(
-                width: 350,
-                height: 20,
-                child: CustomPaint(
-                  painter: OpenPainter(),
-                ),
-              ),
-            ],
-          ),
-          Row(children: const [
-            SizedBox(width: 20),
-            SizedBox(
-                width: 350,
-                height: 20,
-                child: Text(
-                  "69/128",
-                  style: TextStyle(fontSize: 12, color: Colors.black),
-                  textAlign: TextAlign.right,
-                )),
-          ]),
-          const SizedBox(height: 40),
           Row(children: [
             const SizedBox(width: 20),
             SizedBox(

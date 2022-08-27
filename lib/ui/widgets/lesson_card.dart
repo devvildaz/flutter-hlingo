@@ -38,7 +38,7 @@ class LessonCard extends StatelessWidget {
                     border: Border.all(color: Colors.black38),
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: Text(title)
+ child: Text(title)
                 )),
           );
         });
