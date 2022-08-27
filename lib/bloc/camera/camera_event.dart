@@ -10,9 +10,9 @@ class LoadCamerasEvent extends CameraEvent {
 }
 
 class InitCameraEvent extends CameraEvent {
-  const InitCameraEvent(this.cameras, this.idxSelected);
+  const InitCameraEvent(this.idxSelected);
 
-  final List<CameraDescription> cameras;
+  //final List<CameraDescription> cameras;
   final int idxSelected;
 }
 

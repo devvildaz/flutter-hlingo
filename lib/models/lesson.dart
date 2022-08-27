@@ -29,16 +29,15 @@ class Lesson {
         id: Id.fromJson(json["_id"]),
         title: json["title"],
         description: json["description"],
-        exampleVideo: json["example_video"],
+        exampleVideo: json["example"],
         categoryName: json["category_name"],
-        dateCreated: DateCreated.fromJson(json["date_created"]),
       );
 
   Map<String, dynamic> toJson() => {
         "_id": id.toJson(),
         "title": title,
         "description": description,
-        "example_video": exampleVideo,
+        "example": exampleVideo,
         "category_name": categoryName,
         "date_created": dateCreated?.toJson(),
       };

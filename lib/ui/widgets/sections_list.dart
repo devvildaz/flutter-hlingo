@@ -57,9 +57,12 @@ class _SectionsListState extends State<SectionsList> {
       return Category(
         name: category,
         expandedValue: lessonsInCategory.map((lesson) {
+          debugPrint(lesson.exampleVideo);
           return LessonCard(
             id: lesson.id.oid,
             title: lesson.title,
+            description: lesson.description,
+            trainVideo: lesson.exampleVideo,
           );
         }).toList(),
       );

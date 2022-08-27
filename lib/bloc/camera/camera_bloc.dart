@@ -20,21 +20,29 @@ class CameraBloc extends Bloc<CameraEvent, CameraState>{
       }
     });
     on<InitCameraEvent>((event, emit) async {
-      var cameras = event.cameras;
       try {
-        CameraController controller = await CameraRepository.initializeCamera(cameras, event.idxSelected, false);
-        // print(" " + controller.description.toString());
+        var cameras = state.cameras;
+        Optional<CameraController> controller = state.controller;
+        var cameraIdx = state.cameraIdxSelected;
+        emit(const CameraState(status: CamStatus.loading));
+        if(cameraIdx != event.idxSelected) {
+          if(controller.isPresent) {
+            controller.value.dispose();
+          }
+          controller = Optional.of(await CameraRepository.initializeCamera(cameras, event.idxSelected, false));
+        }
         emit(CameraState(
             status: CamStatus.success,
             cameras: cameras,
-            controller: Optional<CameraController>.of(controller),
-            cameraIdxSelected: event.idxSelected ));
+            controller: controller,
+            cameraIdxSelected: event.idxSelected
+        ));
       } on Exception catch (e) {
         emit(const CameraState(status: CamStatus.failure));
       }
     });
     on<RemoveCameraEvent>((event, emit) async {
-      List<CameraDescription> cameras = state.cameras;
+      var cameras = state.cameras;
       try {
         emit(const CameraState(status: CamStatus.loading));
         event.controller.dispose();

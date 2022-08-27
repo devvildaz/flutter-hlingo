@@ -4,17 +4,17 @@ import 'package:auto_route/auto_route.dart';
 import 'package:camera/camera.dart';
 import "package:flutter/material.dart";
 import 'package:hlingo/bloc/camera/camera_bloc.dart';
-import 'package:hlingo/models/lesson.dart';
 import 'package:hlingo/routes/router.gr.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hlingo/ui/pages/review_screen.dart';
 
 class LessonWrapperPage extends StatefulWidget {
   const LessonWrapperPage({
-    Key? key, required this.id
+    Key? key, required this.id, required this.description, this.trainVideo
   }) : super(key: key);
 
   final String id;
+  final String description;
+  final String? trainVideo;
 
   @override
   State<LessonWrapperPage> createState() => _LessonWrapperPageState();
@@ -30,7 +30,7 @@ enum LessonState {
 class _LessonWrapperPageState extends State<LessonWrapperPage> {
 
   late LessonState currentState;
-  late CameraController controller;
+  List<CameraDescription>? cameras;
   late String videoUrl;
   late String response;
 
@@ -44,19 +44,26 @@ class _LessonWrapperPageState extends State<LessonWrapperPage> {
   Widget build(BuildContext context) {
     return BlocListener<CameraBloc, CameraState>(
       listener: (context, state) {
-        if(state.controller.isPresent) {
-          setState(()  {
-            currentState = LessonState.recording;
-            controller = state.controller.value;
-          });
-        }
+
       },
       child: AutoRouter.declarative(
           routes: (handler) {
             return [
-              LessonRoute(id: widget.id),
+              LessonRoute(
+                  id: widget.id,
+                  description: widget.description,
+                  urlVideo: widget.trainVideo,
+                  onNext: () {
+                    setState(() {
+                      currentState = LessonState.recording;
+                    });
+                    if(context.read<CameraBloc>().state.cameras.isEmpty){
+                      context.read<CameraBloc>().add(const LoadCamerasEvent());
+                    }
+                  }
+              ),
               if(currentState == LessonState.recording) LessonCameraRoute(
-                  cameraController: controller,
+                  cameras: context.read<CameraBloc>().state.cameras,
                   onTerminate: (String videoUrl) {
                     setState(() {
                       this.videoUrl = videoUrl;
@@ -64,7 +71,7 @@ class _LessonWrapperPageState extends State<LessonWrapperPage> {
                     });
                   },
                   onDispose: () {
-                    context.read<CameraBloc>().add(RemoveCameraEvent(controller));
+
                   }
               ),
               if(currentState == LessonState.videoPreview) VideoPreviewRoute(
@@ -77,14 +84,10 @@ class _LessonWrapperPageState extends State<LessonWrapperPage> {
                     });
                   },
                   onPrev: () {
-                    CameraState cameraState = context.read<CameraBloc>().state;
-                    List<CameraDescription> cameras = cameraState.cameras;
-                    context.read<CameraBloc>().add(InitCameraEvent(cameras, cameraState.cameraIdxSelected));
+
                   },
                   onDispose: () {
-                    CameraState cameraState = context.read<CameraBloc>().state;
-                    List<CameraDescription> cameras = cameraState.cameras;
-                    context.read<CameraBloc>().add(InitCameraEvent(cameras, cameraState.cameraIdxSelected));
+
                   }
               ),
               if(currentState == LessonState.evaluate) ReviewScreenRoute(
@@ -96,7 +99,8 @@ class _LessonWrapperPageState extends State<LessonWrapperPage> {
                   },
                   returnOption: () {
                     AutoRouter.of(context).pop();
-                  }
+                  },
+                  description: widget.description
               ),
             ];
           }
